@@ -6,6 +6,10 @@ import AuthLayout from '@/layouts/AuthLayout.vue'
 <template>
   <AuthLayout>
 
+    <template #header>
+      <span class="font-bold text-white tracking-wider text-lg uppercase mb-8">Prestify</span>
+    </template>
+
     <div class="text-center mb-8">
       <h1 class="text-2xl font-bold text-gray-800 mb-2">¡Bienvenido de nuevo!</h1>
       <p class="text-gray-400 text-sm">
@@ -31,9 +35,9 @@ import AuthLayout from '@/layouts/AuthLayout.vue'
           <input type="checkbox">
           Recuérdame
         </label>
-        <a href="/password" class="text-indigo-600 font-semibold">
+        <!-- <a href="/password" class="text-indigo-600 font-semibold">
           Recuperar contraseña
-        </a>
+        </a> -->
       </div>
 
       <button class="w-full bg-indigo-500 text-white py-3 rounded-xl">
@@ -43,9 +47,9 @@ import AuthLayout from '@/layouts/AuthLayout.vue'
 
     <p class="text-center text-xs text-gray-400 mt-8">
       No tienes una cuenta?
-      <a href="/register" class="text-indigo-600 font-bold">
+      <router-link to="/registrarse" class="text-indigo-600 font-bold">
         Registrarse
-      </a>
+      </router-link>
     </p>
 
   </AuthLayout>
