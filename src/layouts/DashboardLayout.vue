@@ -15,7 +15,7 @@ import Navbar from '@/components/dashboard/Navbar.vue'
       <Navbar />
 
       <!-- Contenido dinámico -->
-      <main class="flex-1 overflow-y-auto p-6">
+      <main class="custom-scrollbar flex-1 overflow-y-auto p-6">
         <router-view />
       </main>
 

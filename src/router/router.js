@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Login from '@/views/Login.vue'
 import registro from '@/views/registro.vue'
-import DashboardView from '@/views/DashboardView.vue'
+
+import DashboardLayout from '@/layouts/DashboardLayout.vue'
+import DashboardHome from '@/views/DashboardHomeView.vue'
 
 const routes = [
   {
@@ -18,7 +20,15 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: DashboardView,
+    component: DashboardLayout,
+    redirect: 'dashboard/home',
+    children: [
+      {
+        path: 'home',
+        name: 'dashboard-home',
+        component: DashboardHome
+      }
+    ]
   }
 ]
 
