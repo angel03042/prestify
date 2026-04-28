@@ -1,4 +1,6 @@
 <script setup>
+import Sidebar from '@/components/dashboard/Sidebar.vue'
+import Navbar from '@/components/dashboard/Navbar.vue'
 </script>
 
 <template>
@@ -14,7 +16,7 @@
 
       <!-- Contenido dinámico -->
       <main class="flex-1 overflow-y-auto p-6">
-        <slot />
+        <router-view />
       </main>
 
     </div>
