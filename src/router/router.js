@@ -5,6 +5,7 @@ import registro from '@/views/registro.vue'
 
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import DashboardHome from '@/views/DashboardHomeView.vue'
+import DashboardClient from '@/views/DashboardClientView.vue'
 
 const routes = [
   {
@@ -27,6 +28,11 @@ const routes = [
         path: 'home',
         name: 'dashboard-home',
         component: DashboardHome
+      },
+      {
+        path: 'clientes',
+        name: 'dashboard-clientes',
+        component: DashboardClient
       }
     ]
   }
