@@ -1,8 +1,9 @@
 <script setup>
+import ModalVerPrestamo from '@/components/dashboard/ModalVerPrestamo.vue'
 import { ref } from 'vue'
 
 const showModal = ref(false)
-const isDeleteModalOpen = ref(false)
+const isViewOpen = ref(false)
 </script>
 
 <template>
@@ -49,7 +50,7 @@ const isDeleteModalOpen = ref(false)
             <tr class="hover:bg-zinc-800/20 group transition-colors">
               
               <td class="py-4 px-6 text-white font-medium">
-                Juan Pérez
+                Angel Francisco Benitez Ramirez
               </td>
 
               <td class="py-4 px-6 text-white">$2,000</td>
@@ -66,7 +67,7 @@ const isDeleteModalOpen = ref(false)
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   
                   <!-- VER -->
-                  <button class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg" title="Ver">
+                  <button @click="isViewOpen = true" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg" title="Ver">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
                   </button>
 
@@ -76,8 +77,7 @@ const isDeleteModalOpen = ref(false)
                   </button>
 
                   <!-- ELIMINAR -->
-                  <button @click="isDeleteModalOpen = true"
-                    class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg">
+                  <button class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
                   </button>
 
@@ -93,4 +93,5 @@ const isDeleteModalOpen = ref(false)
     </div>
 
   </section>
+  <ModalVerPrestamo v-if="isViewOpen" @close="isViewOpen = false"/>
 </template>
