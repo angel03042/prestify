@@ -1,4 +1,13 @@
-<script setup></script>
+<script setup>
+import ModalAddClient from '@/components/dashboard/ModalAddClient.vue';
+import { ref } from 'vue';
+
+const showModal = ref(false);
+
+const toggleModal = () => {
+  showModal.value = !showModal.value;
+};
+</script>
 
 <template>
   <section class="flex flex-col overflow-auto bg-neutral-900">
@@ -25,7 +34,7 @@
           Filtrar
         </button> -->
 
-        <button type="button" class="flex-1 md:flex-none bg-white text-black px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-zinc-200 transition-all active:scale-95 shadow-lg shadow-white/5">
+        <button @click="showModal = true" type="button" class="flex-1 md:flex-none bg-white text-black px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-zinc-200 transition-all active:scale-95 shadow-lg shadow-white/5">
           Agregar Cliente
         </button>
       </div>
@@ -88,4 +97,5 @@
       </div>
     </div>
   </section>
+  <ModalAddClient v-if="showModal" @close="showModal = false"/>
 </template>
