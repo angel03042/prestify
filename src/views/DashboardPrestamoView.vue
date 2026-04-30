@@ -43,7 +43,7 @@ const isPagoOpen = ref(false)
             <tr class="bg-zinc-800/30 text-left">
               <th class="py-4 px-6 text-zinc-500 text-[11px] uppercase">Cliente</th>
               <th class="py-4 px-6 text-zinc-500 text-[11px] uppercase">Monto</th>
-              <th class="py-4 px-6 text-zinc-500 text-[11px] uppercase">Restante</th>
+              <th class="py-4 px-6 text-zinc-500 text-[11px] uppercase">Quincenas</th>
               <th class="py-4 px-6 text-zinc-500 text-[11px] uppercase">Fecha</th>
               <th class="py-4 px-6 text-zinc-500 text-[11px] uppercase">Estado</th>
               <th class="py-4 px-6 text-zinc-500 text-[11px] uppercase text-right">Acciones</th>
@@ -60,7 +60,7 @@ const isPagoOpen = ref(false)
 
               <td class="py-4 px-6 text-white">$2,000</td>
 
-              <td class="py-4 px-6 text-zinc-300">$1,200</td>
+              <td class="py-4 px-6 text-zinc-300">8</td>
 
               <td class="py-4 px-6 text-zinc-400">29 Abr 2026</td>
 

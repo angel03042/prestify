@@ -44,13 +44,13 @@ defineEmits(['close'])
         </div>
 
         <div class="flex flex-col gap-1">
-          <span class="text-zinc-500">Fecha</span>
-          <span class="text-white">29 Abril 2026</span>
+          <span class="text-zinc-500">Pagos</span>
+          <span class="text-white">$ 275</span>
         </div>
 
         <div class="flex flex-col gap-1">
-          <span class="text-zinc-500">Interés</span>
-          <span class="text-white">10%</span>
+          <span class="text-zinc-500">Fecha</span>
+          <span class="text-white">29 Abril 2026</span>
         </div>
 
         <div class="flex flex-col gap-1">
