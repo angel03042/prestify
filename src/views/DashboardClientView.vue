@@ -1,12 +1,13 @@
 <script setup>
 import ModalAddClient from '@/components/dashboard/ModalAddClient.vue';
+import x from '@/components/dashboard/ModalUpdateClient.vue'
+import ModalDelete from '@/components/dashboard/ModalDeleteClient.vue'
 import { ref } from 'vue';
+import ModalUpdateClient from '../components/dashboard/ModalUpdateClient.vue';
 
 const showModal = ref(false);
-
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-};
+const isDeleteModalOpen = ref(false);
+const isUpdateModalOpen = ref(false);
 </script>
 
 <template>
@@ -77,18 +78,18 @@ const toggleModal = () => {
               <td class="py-4 px-6 text-emerald-400 font-medium">Corriente</td>
               <td class="py-4 px-6">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onclick="openProductDrawer('edit', { id: ${p.id}, name: '${p.nombre}', categoria: '${p.categoria_id}', stock: '${p.stock}', precio: '${p.precio}', precio_venta: '${p.precio_venta}', ganancia: '${p.ganancia}', status: ${p.status}, imagen: '${p.imagen}' })" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Editar">
+                  <button @click="isUpdateModalOpen = true" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Editar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                   </button>
-                  <button onclick="prepareDelete('${p.id}', '${p.nombre}')" class="deleteProduct p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all" title="Eliminar">
+                  <button @click="isDeleteModalOpen = true" class="deleteProduct p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all" title="Eliminar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                   </button>
-                  <button class="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all" title="Imprimir">
+                  <!-- <button class="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all" title="Imprimir">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="6 9 6 2 18 2 18 9"></polyline>
                       <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect>
                     </svg>
-                  </button>
+                  </button> -->
                 </div>
               </td>
             </tr>
@@ -98,4 +99,6 @@ const toggleModal = () => {
     </div>
   </section>
   <ModalAddClient v-if="showModal" @close="showModal = false"/>
+  <ModalDelete v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false"/>
+  <ModalUpdateClient v-if="isUpdateModalOpen" @close="isUpdateModalOpen = false"/>
 </template>
