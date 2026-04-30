@@ -1,6 +1,7 @@
 <script setup>
 import ModalVerPrestamo from '@/components/dashboard/ModalVerPrestamo.vue'
 import ModalPagoPrestamo from '@/components/dashboard/ModalPagoPrestamo.vue'
+import ModalNewPrestamo from '@/components/dashboard/ModalNewPago.vue'
 import { ref } from 'vue'
 
 const showModal = ref(false)
@@ -97,4 +98,5 @@ const isPagoOpen = ref(false)
   </section>
   <ModalVerPrestamo v-if="isViewOpen" @close="isViewOpen = false"/>
   <ModalPagoPrestamo v-if="isPagoOpen" @close="isPagoOpen = false"/>
+  <ModalNewPrestamo v-if="showModal" @close="showModal = false"/>
 </template>
