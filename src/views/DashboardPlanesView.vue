@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import ModalAddPlan from '@/components/dashboard/ModalNewPlan.vue'
+import ModalUpdatePlan from '@/components/dashboard/ModalUpdatePlan.vue'
+import ModalDeletePlan from '@/components/dashboard/ModalDeletePlan.vue'
 
 const showModal = ref(false);
 const isDeleteModalOpen = ref(false);
@@ -101,7 +103,7 @@ const isUpdateModalOpen = ref(false);
 
   <!-- Aquí luego conectas tus modales -->
   <ModalAddPlan v-if="showModal" @close="showModal = false" />
-  <!-- <ModalDeletePlan v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false" /> -->
-  <!-- <ModalUpdatePlan v-if="isUpdateModalOpen" @close="isUpdateModalOpen = false" /> -->
+  <ModalDeletePlan v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false" />
+  <ModalUpdatePlan v-if="isUpdateModalOpen" @close="isUpdateModalOpen = false" />
 
 </template>
