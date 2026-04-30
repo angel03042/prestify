@@ -1,9 +1,11 @@
 <script setup>
 import ModalVerPrestamo from '@/components/dashboard/ModalVerPrestamo.vue'
+import ModalPagoPrestamo from '@/components/dashboard/ModalPagoPrestamo.vue'
 import { ref } from 'vue'
 
 const showModal = ref(false)
 const isViewOpen = ref(false)
+const isPagoOpen = ref(false)
 </script>
 
 <template>
@@ -72,7 +74,7 @@ const isViewOpen = ref(false)
                   </button>
 
                   <!-- REGISTRAR PAGO -->
-                  <button class="p-2 text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg">
+                  <button @click="isPagoOpen = true" class="p-2 text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
                   </button>
 
@@ -94,4 +96,5 @@ const isViewOpen = ref(false)
 
   </section>
   <ModalVerPrestamo v-if="isViewOpen" @close="isViewOpen = false"/>
+  <ModalPagoPrestamo v-if="isPagoOpen" @close="isPagoOpen = false"/>
 </template>
