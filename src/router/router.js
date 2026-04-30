@@ -8,6 +8,7 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import DashboardHome from '@/views/DashboardHomeView.vue'
 import DashboardClient from '@/views/DashboardClientView.vue'
 import DashboardPrestamo from '@/views/DashboardPrestamoView.vue'
+import DashboardPlanes from '@/views/DashboardPlanesView.vue'
 
 const routes = [
   {
@@ -40,6 +41,11 @@ const routes = [
         path: 'prestamos',
         name: 'dashboard-prestamos',
         component: DashboardPrestamo
+      },
+      {
+        path: 'planes',
+        name: 'dashboard-planes',
+        component: DashboardPlanes
       }
     ]
   }
