@@ -4,8 +4,10 @@ import Login from '@/views/Login.vue'
 import registro from '@/views/registro.vue'
 
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
+
 import DashboardHome from '@/views/DashboardHomeView.vue'
 import DashboardClient from '@/views/DashboardClientView.vue'
+import DashboardPrestamo from '@/views/DashboardPrestamoView.vue'
 
 const routes = [
   {
@@ -33,6 +35,11 @@ const routes = [
         path: 'clientes',
         name: 'dashboard-clientes',
         component: DashboardClient
+      },
+      {
+        path: 'prestamos',
+        name: 'dashboard-prestamos',
+        component: DashboardPrestamo
       }
     ]
   }
