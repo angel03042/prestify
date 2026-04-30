@@ -37,14 +37,14 @@ import router from '../../router/router';
               <span class="ml-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Prestamos</span>
           </router-link>
 
-          <router-link to="/dashboard/cartera" class="flex items-center p-3 rounded-xl text-zinc-400 hover:bg-white hover:text-black transition-all duration-200 overflow-hidden" active-class="bg-white/15 text-black">
+          <router-link to="/dashboard/planes" class="flex items-center p-3 rounded-xl text-zinc-400 hover:bg-white hover:text-black transition-all duration-200 overflow-hidden" active-class="bg-white/15 text-black">
               <div class="min-w-[32px] flex justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H5a2 2 0 0 0 0 4h15a1 1 0 0 0 1-1v-4"/><rect width="3" height="3" x="15" y="10" rx="1"/></svg>
               </div>
-              <span class="ml-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Cartera</span>
+              <span class="ml-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">Planes</span>
           </router-link>
 
-          <rouuter-link to="/dashboard/reportes" class="flex items-center p-3 rounded-xl text-zinc-400 hover:bg-white hover:text-black transition-all duration-200 overflow-hidden" active-class="bg-white/15 text-black">
+          <router-link to="/dashboard/reportes" class="flex items-center p-3 rounded-xl text-zinc-400 hover:bg-white hover:text-black transition-all duration-200 overflow-hidden" active-class="bg-white/15 text-black">
             <div class="min-w-[32px] flex justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart-3">
                 <path d="M3 3v18h18"/>
@@ -56,7 +56,7 @@ import router from '../../router/router';
             <span class="ml-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
             Reportes
             </span>
-          </rouuter-link>
+          </router-link>
       </div>
     </div>
 
