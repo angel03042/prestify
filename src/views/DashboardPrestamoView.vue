@@ -1,11 +1,13 @@
 <script setup>
 import ModalVerPrestamo from '@/components/dashboard/ModalVerPrestamo.vue'
 import ModalPagoPrestamo from '@/components/dashboard/ModalPagoPrestamo.vue'
+import ModalDeletePrestamo from '@/components/dashboard/ModalDeletePrestamo.vue'
 import ModalNewPrestamo from '@/components/dashboard/ModalNewPago.vue'
 import { ref } from 'vue'
 
 const showModal = ref(false)
 const isViewOpen = ref(false)
+const isDeleteOpen = ref(false)
 const isPagoOpen = ref(false)
 </script>
 
@@ -80,7 +82,7 @@ const isPagoOpen = ref(false)
                   </button>
 
                   <!-- ELIMINAR -->
-                  <button class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg">
+                  <button @click="isDeleteOpen = true" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
                   </button>
 
@@ -98,5 +100,6 @@ const isPagoOpen = ref(false)
   </section>
   <ModalVerPrestamo v-if="isViewOpen" @close="isViewOpen = false"/>
   <ModalPagoPrestamo v-if="isPagoOpen" @close="isPagoOpen = false"/>
+  <ModalDeletePrestamo v-if="isDeleteOpen" @close="isDeleteOpen = false"/>
   <ModalNewPrestamo v-if="showModal" @close="showModal = false"/>
 </template>
