@@ -55,7 +55,7 @@
           </span>
         </div>
         <p class="text-xs uppercase tracking-widest text-zinc-500 font-bold">
-          Total Capital
+          Total Recuperado
         </p>
         <h3 class="text-4xl font-bold text-white mt-1">$0</h3>
       </div>
@@ -161,8 +161,8 @@
         Operaciones
       </h2>
       <div class="flex flex-wrap gap-4">
-        <a
-          href="/dashboard/productos"
+        <router-link
+          to="/dashboard/clientes"
           class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black text-sm font-bold hover:bg-zinc-200 transition-all active:scale-95 shadow-lg shadow-white/5"
         >
           <svg
@@ -183,10 +183,10 @@
             <line x1="22" x2="16" y1="11" y2="11" />
           </svg>
           Nuevo cliente
-        </a>
+        </router-link>
 
-        <a
-          href="/dashboard/tienda"
+        <router-link
+          to="/dashboard/prestamos"
           class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-800 text-white text-sm font-semibold border border-zinc-700 hover:bg-zinc-700 transition-all active:scale-95"
         >
           <svg
@@ -206,7 +206,7 @@
             <path d="M6 12h.01M18 12h.01" />
           </svg>
           Registrar prestamo
-        </a>
+        </router-link>
       </div>
     </div>
 
@@ -301,11 +301,11 @@
           </p>
         </div>
 
-        <button
+        <router-link to="/dashboard/reportes"
           class="relative z-10 mt-8 self-start px-6 py-2.5 rounded-xl bg-white text-indigo-700 text-sm font-bold hover:bg-indigo-50 transition-all shadow-lg"
         >
           Ver reportes
-        </button>
+        </router-link>
 
         <div
           class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"
