@@ -9,6 +9,7 @@ import DashboardHome from '@/views/DashboardHomeView.vue'
 import DashboardClient from '@/views/DashboardClientView.vue'
 import DashboardPrestamo from '@/views/DashboardPrestamoView.vue'
 import DashboardPlanes from '@/views/DashboardPlanesView.vue'
+import DashboardReport from '@/views/DashboardReportView.vue'
 
 const routes = [
   {
@@ -46,6 +47,11 @@ const routes = [
         path: 'planes',
         name: 'dashboard-planes',
         component: DashboardPlanes
+      },
+      {
+        path: 'reportes',
+        name: 'dashboard-reportes',
+        component: DashboardReport
       }
     ]
   }
