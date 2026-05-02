@@ -1,6 +1,6 @@
 import { supa } from "@/lib/supabase.js";
 
-export const registerService = async (nombre, apellido, emial, password) => {
+export const registerService = async (nombre, apellido, email, password, terminos) => {
   try {
     const { data: authData, error: authError } = await supa.auth.signUp({
       email,
@@ -13,7 +13,7 @@ export const registerService = async (nombre, apellido, emial, password) => {
 
     const { data: userData, error: dbError } = await supa
       .from("usuarios")
-      .insert([{ id: user.id, nombre, apellido, correo: email }])
+      .insert([{ id: user.id, nombre, apellido, correo: email, acepta_terminos: terminos }])
       .select();
 
     if (dbError) throw dbError;
