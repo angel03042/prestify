@@ -1,6 +1,41 @@
 <!-- views/auth/LoginView.vue -->
 <script setup>
-import AuthLayout from '@/layouts/AuthLayout.vue'
+import AuthLayout from '@/layouts/AuthLayout.vue';
+import { loginService } from '@/services/auth/login.js';
+import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router'
+
+const router = useRouter();
+
+const form = reactive({
+  email: '',
+  password: '',
+})
+
+const loading = ref(false)
+const message = ref('')
+
+const handleSubmit = async () => {
+  if (loading.value) return // Evita múltiples clics accidentales
+  
+  loading.value = true
+  message.value = ''
+  
+  try {
+    const response = await loginService(form.email, form.password)
+
+    router.push('/dashboard')
+  } catch (error) {
+    if (error.message.includes('Invalid login credentials')) {
+      message.value = 'El correo o la contraseña son incorrectos.'
+    } else {
+      message.value = 'Ocurrió un error inesperado. Inténtalo de nuevo.'
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
 </script>
 
 <template>
@@ -17,16 +52,16 @@ import AuthLayout from '@/layouts/AuthLayout.vue'
       </p>
     </div>
 
-    <form class="space-y-5">
+    <form @submit.prevent="handleSubmit" class="space-y-5">
       <div>
         <label class="block text-xs font-bold text-gray-700 mb-2">Correo</label>
-        <input type="email" placeholder="Ingrese su correo"
+        <input v-model="form.email" type="email" placeholder="Ingrese su correo"
           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
       </div>
 
       <div>
         <label class="block text-xs font-bold text-gray-700 mb-2">Contraseña</label>
-        <input type="password" placeholder="Ingrese su contraseña"
+        <input v-model="form.password" type="password" placeholder="Ingrese su contraseña"
           class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm">
       </div>
 
@@ -40,7 +75,8 @@ import AuthLayout from '@/layouts/AuthLayout.vue'
         </a> -->
       </div>
 
-      <button class="w-full bg-indigo-500 text-white py-3 rounded-xl">
+      <p v-if="message" class="text-red-500 text-xs">{{ message }}</p>
+      <button :disabled="loading" type="submit" class="w-full bg-indigo-500 text-white py-3 rounded-xl">
         Iniciar sesión
       </button>
     </form>
