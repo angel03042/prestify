@@ -11,8 +11,15 @@ const showModal = ref(false);
 const isDeleteModalOpen = ref(false);
 const isUpdateModalOpen = ref(false);
 
+const clienteSeleccionado = ref(null);
+
 const listaClientes = ref([]);
 const cargando = ref(true);
+
+const abrirModalUpdate = (cliente) => {
+  clienteSeleccionado.value = cliente;
+  isUpdateModalOpen.value = true
+}
 
 const cargarClientes = async () => {
   cargando.value = true;
@@ -98,7 +105,7 @@ onMounted(cargarClientes);
               <td class="py-4 px-6 text-emerald-400 font-medium">{{ cliente.status }}</td>
               <td class="py-4 px-6">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button @click="isUpdateModalOpen = true" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Editar">
+                  <button @click="abrirModalUpdate(cliente)" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Editar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                   </button>
                   <button @click="isDeleteModalOpen = true" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all" title="Eliminar">
@@ -126,5 +133,5 @@ onMounted(cargarClientes);
   </section>
   <ModalAddClient v-if="showModal" @close="showModal = false" @client-added="cargarClientes"/>
   <ModalDelete v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false"/>
-  <ModalUpdateClient v-if="isUpdateModalOpen" @close="isUpdateModalOpen = false"/>
+  <ModalUpdateClient v-if="isUpdateModalOpen" :cliente="clienteSeleccionado" @close="isUpdateModalOpen = false" @client-updated="cargarClientes"/>
 </template>
