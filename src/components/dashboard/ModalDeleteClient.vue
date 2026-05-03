@@ -1,5 +1,29 @@
 <script setup>
-defineEmits(['close'])
+import { deleteClient } from '@/services/supabase/clients/deleteClients.js';
+import { ref } from 'vue'
+
+const props = defineProps({
+    cliente: Object
+});
+
+const emit = defineEmits(['close', 'client-deleted']);
+const loading = ref(false);
+
+const confirmDelete = async () => {
+  if (!props.cliente?.id) return;
+  
+  loading.value = true;
+  try {
+    await deleteClient(props.cliente.id);
+    emit('client-deleted');
+    emit('close');
+  } catch (error) {
+    console.error("Error al eliminar:", error);
+    alert("No se pudo eliminar el cliente");
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -20,10 +44,7 @@ defineEmits(['close'])
     </div>
 
     <div class="flex flex-col gap-2">
-      <button 
-        class="w-full bg-red-500 text-white py-4 rounded-2xl font-bold text-sm hover:bg-red-600 transition-all active:scale-95 shadow-lg shadow-red-500/20"
-        onclick="confirmDelete()"
-      >
+      <button :disabled="loading" @click="confirmDelete" class="w-full bg-red-500 text-white py-4 rounded-2xl font-bold text-sm hover:bg-red-600 transition-all active:scale-95 shadow-lg shadow-red-500/20">
         Sí, eliminar cliente
       </button>
       <button 

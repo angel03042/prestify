@@ -12,6 +12,7 @@ const isDeleteModalOpen = ref(false);
 const isUpdateModalOpen = ref(false);
 
 const clienteSeleccionado = ref(null);
+const clienteAEliminar = ref(null);
 
 const listaClientes = ref([]);
 const cargando = ref(true);
@@ -20,6 +21,11 @@ const abrirModalUpdate = (cliente) => {
   clienteSeleccionado.value = cliente;
   isUpdateModalOpen.value = true
 }
+
+const abrirModalDelete = (cliente) => {
+  clienteAEliminar.value = cliente;
+  isDeleteModalOpen.value = true;
+};
 
 const cargarClientes = async () => {
   cargando.value = true;
@@ -108,7 +114,7 @@ onMounted(cargarClientes);
                   <button @click="abrirModalUpdate(cliente)" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Editar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                   </button>
-                  <button @click="isDeleteModalOpen = true" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all" title="Eliminar">
+                  <button @click="abrirModalDelete(cliente)" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all" title="Eliminar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                   </button>
                   <!-- <button class="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all" title="Imprimir">
@@ -132,6 +138,6 @@ onMounted(cargarClientes);
     </div>
   </section>
   <ModalAddClient v-if="showModal" @close="showModal = false" @client-added="cargarClientes"/>
-  <ModalDelete v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false"/>
+  <ModalDelete v-if="isDeleteModalOpen" :cliente="clienteAEliminar" @close="isDeleteModalOpen = false" @client-deleted="cargarClientes"/>
   <ModalUpdateClient v-if="isUpdateModalOpen" :cliente="clienteSeleccionado" @close="isUpdateModalOpen = false" @client-updated="cargarClientes"/>
 </template>

@@ -12,5 +12,6 @@ export const updateClient = async (id, nombre, apellido, telefono, credito) => {
     .select();
 
   if (error) throw error;
+  
   return data;
 };
