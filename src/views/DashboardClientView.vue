@@ -1,13 +1,33 @@
 <script setup>
 import ModalAddClient from '@/components/dashboard/ModalAddClient.vue';
-import x from '@/components/dashboard/ModalUpdateClient.vue'
+import ModalUpdateClient from '@/components/dashboard/ModalUpdateClient.vue'
 import ModalDelete from '@/components/dashboard/ModalDeleteClient.vue'
-import { ref } from 'vue';
-import ModalUpdateClient from '../components/dashboard/ModalUpdateClient.vue';
+
+import { readClients } from '@/services/supabase/clients/readClients.js'
+
+import { ref, onMounted } from 'vue';
 
 const showModal = ref(false);
 const isDeleteModalOpen = ref(false);
 const isUpdateModalOpen = ref(false);
+
+const listaClientes = ref([]);
+const cargando = ref(true);
+
+const cargarClientes = async () => {
+  cargando.value = true;
+  try {
+    const data = await readClients();
+    listaClientes.value = data;
+  } catch (error) {
+    console.error("Error al cargar clientes:", error);
+  } finally {
+    cargando.value = false;
+  }
+};
+
+// 3. Ejecutar al cargar la página
+onMounted(cargarClientes);
 </script>
 
 <template>
@@ -68,14 +88,14 @@ const isUpdateModalOpen = ref(false);
           </thead>
 
           <tbody class="divide-y divide-zinc-800/50">
-            <tr class="hover:bg-zinc-800/20 transition-colors group">
+            <tr v-for="cliente in listaClientes" :key="cliente.id" class="hover:bg-zinc-800/20 transition-colors group">
               <td class="py-2 px-6">
-                <p class="text-white font-semibold">Angel Francisco Benitez Ramirez</p>
+                <p class="text-white font-semibold">{{ cliente.nombre }} {{ cliente.apellido }}</p>
               </td>
-              <td class="py-4 px-6 text-zinc-200 font-medium">9331244508</td>
-              <td class="py-4 px-6 text-emerald-500 font-medium">$3,000</td>
-              <td class="py-4 px-6">$1,500</td>
-              <td class="py-4 px-6 text-emerald-400 font-medium">Corriente</td>
+              <td class="py-4 px-6 text-zinc-200 font-medium">{{ cliente.telefono }}</td>
+              <td class="py-4 px-6 text-emerald-500 font-medium">{{ cliente.credito }}</td>
+              <td class="py-4 px-6"></td>
+              <td class="py-4 px-6 text-emerald-400 font-medium">{{ cliente.status }}</td>
               <td class="py-4 px-6">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button @click="isUpdateModalOpen = true" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Editar">
@@ -93,12 +113,18 @@ const isUpdateModalOpen = ref(false);
                 </div>
               </td>
             </tr>
+            <!-- Estado vacío o carga -->
+            <tr v-if="listaClientes.length === 0 && !cargando">
+              <td colspan="6" class="py-10 text-center text-zinc-500">
+                No se encontraron clientes.
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
     </div>
   </section>
-  <ModalAddClient v-if="showModal" @close="showModal = false"/>
+  <ModalAddClient v-if="showModal" @close="showModal = false" @client-added="cargarClientes"/>
   <ModalDelete v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false"/>
   <ModalUpdateClient v-if="isUpdateModalOpen" @close="isUpdateModalOpen = false"/>
 </template>

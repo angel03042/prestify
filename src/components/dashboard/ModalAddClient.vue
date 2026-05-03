@@ -2,7 +2,7 @@
 import { clientsServices } from '@/services/supabase/clients/clients.js'
 import { reactive, ref } from 'vue'
 
-defineEmits(['close']);
+const emit = defineEmits(['close', 'client-added']);
 
 const form = reactive({
   nombre: '',
@@ -18,12 +18,14 @@ const addClients = async () => {
   loading.value = true;
   try {
     await clientsServices(form.nombre, form.apellido, form.telefono, form.credito)
+    emit('client-added');
     Object.assign(form, {
       nombre: '',
       apellido: '',
       telefono: '',
       credito: ''
     })
+    emit('close');
   } catch (error) {
     console.error('Ocurio un: ', error)
   } finally {
