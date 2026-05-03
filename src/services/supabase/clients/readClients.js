@@ -9,7 +9,8 @@ export const readClients = async () => {
   let { data: clientes, error } = await supa
     .from("clientes")
     .select("id, nombre, apellido, telefono, credito, status")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
 
   if (error) {
     throw error;

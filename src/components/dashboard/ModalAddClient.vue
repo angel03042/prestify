@@ -1,5 +1,5 @@
 <script setup>
-import { clientsServices } from '@/services/supabase/clients/clients.js'
+import { clientsServices } from '@/services/supabase/clients/insertClients.js'
 import { reactive, ref } from 'vue'
 
 const emit = defineEmits(['close', 'client-added']);

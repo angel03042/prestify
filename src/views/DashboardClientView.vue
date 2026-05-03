@@ -117,7 +117,7 @@ onMounted(cargarClientes);
                 <p class="text-white font-semibold">{{ cliente.nombre }} {{ cliente.apellido }}</p>
               </td>
               <td class="py-4 px-6 text-zinc-200 font-medium">{{ cliente.telefono }}</td>
-              <td class="py-4 px-6 text-emerald-500 font-medium">{{ cliente.credito }}</td>
+              <td class="py-4 px-6 text-emerald-500 font-medium">$ {{ Number(cliente.credito).toLocaleString() }}</td>
               <td class="py-4 px-6"></td>
               <td class="py-4 px-6 text-emerald-400 font-medium">{{ cliente.status }}</td>
               <td class="py-4 px-6">
