@@ -5,7 +5,9 @@ import ModalDelete from '@/components/dashboard/ModalDeleteClient.vue'
 
 import { readClients } from '@/services/supabase/clients/readClients.js'
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+
+const filtroNombre = ref('');
 
 const showModal = ref(false);
 const isDeleteModalOpen = ref(false);
@@ -16,6 +18,15 @@ const clienteAEliminar = ref(null);
 
 const listaClientes = ref([]);
 const cargando = ref(true);
+
+const clientesFiltrados = computed(() => {
+  if (!filtroNombre.value) return listaClientes.value;
+  
+  return listaClientes.value.filter(cliente => 
+    cliente.nombre.toLowerCase().includes(filtroNombre.value.toLowerCase()) ||
+    cliente.apellido.toLowerCase().includes(filtroNombre.value.toLowerCase())
+  );
+});
 
 const abrirModalUpdate = (cliente) => {
   clienteSeleccionado.value = cliente;
@@ -53,7 +64,7 @@ onMounted(cargarClientes);
             <path d="m21 21-4.34-4.34" />
           </svg>
         </div>
-        <input class="w-full pl-10 pr-4 h-11 bg-zinc-800/40 border border-zinc-700/50 rounded-xl outline-none text-sm text-white placeholder:text-zinc-500 focus:border-zinc-500 focus:bg-zinc-800/60 transition-all" type="text" placeholder="Buscar clientes..."/>
+        <input v-model="filtroNombre" class="w-full pl-10 pr-4 h-11 bg-zinc-800/40 border border-zinc-700/50 rounded-xl outline-none text-sm text-white placeholder:text-zinc-500 focus:border-zinc-500 focus:bg-zinc-800/60 transition-all" type="text" placeholder="Buscar clientes..."/>
       </div>
 
       <div class="flex items-center gap-3 w-full md:w-auto">
@@ -101,7 +112,7 @@ onMounted(cargarClientes);
           </thead>
 
           <tbody class="divide-y divide-zinc-800/50">
-            <tr v-for="cliente in listaClientes" :key="cliente.id" class="hover:bg-zinc-800/20 transition-colors group">
+            <tr v-for="cliente in clientesFiltrados" :key="cliente.id" class="hover:bg-zinc-800/20 transition-colors group">
               <td class="py-2 px-6">
                 <p class="text-white font-semibold">{{ cliente.nombre }} {{ cliente.apellido }}</p>
               </td>
