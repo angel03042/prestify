@@ -1,20 +1,22 @@
 <script setup>
-import { readClients } from '@/services/supabase//clients/readClients.js';
+import { readClients } from '@/services/supabase/clients/readClients.js';
+import { readPlan } from '@/services/supabase/planes/readPlan.js'
 import { ref, onMounted } from 'vue';
 
 defineEmits(['close']);
 
 const clientes = ref([]);
+const planes = ref([]);
 
-const listaClientes = async () => {
+onMounted( async () => {
   try {
-    clientes.value = await readClients()
+    const [resClientes, resPlanes] = await Promise.all([readClients(), readPlan()])
+    clientes.value = resClientes;
+    planes.value = resPlanes;
   } catch (error) {
     console.error('Ocurrio un: ', error)
   }
-}
-
-onMounted(listaClientes)
+})
 </script>
 
 <template>
@@ -58,12 +60,7 @@ onMounted(listaClientes)
           <label class="text-zinc-400 text-sm font-medium ml-1">Quincenas</label>
           <select class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
             <option>Seleccione una opcion</option>
-            <option>6 pagos</option>
-            <option>8 pagos</option>
-            <option>10 pagos</option>
-            <option>12 pagos</option>
-            <option>14 pagos</option>
-            <option>16 pagos</option>
+            <option v-for="plan in planes" :key="plan.id" :value="plan.id">{{ plan.nombre }}</option>
           </select>
         </div>
 
