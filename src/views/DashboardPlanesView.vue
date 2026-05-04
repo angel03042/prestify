@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import ModalAddPlan from '@/components/dashboard/ModalNewPlan.vue'
 import ModalUpdatePlan from '@/components/dashboard/ModalUpdatePlan.vue'
 import ModalDeletePlan from '@/components/dashboard/ModalDeletePlan.vue'
@@ -16,6 +16,16 @@ const planDelete = ref(null)
 
 const listaPlanes = ref([])
 const cargando = ref(true);
+
+const filter = ref('')
+
+const filtrarPlanes = computed(() => {
+  if (!filter.value) return listaPlanes.value;
+  
+  return listaPlanes.value.filter(plan => 
+    plan.nombre.toLowerCase().includes(filter.value.toLowerCase())
+  );
+})
 
 const abrirModalUpdate = (plan) => {
   isUpdateModalOpen.value = true
@@ -54,7 +64,7 @@ onMounted(cargarPlanes)
             <path d="m21 21-4.34-4.34"/>
           </svg>
         </div>
-        <input type="text" placeholder="Buscar planes..." class="w-full pl-10 pr-4 h-11 bg-zinc-800/40 border border-zinc-700/50 rounded-xl outline-none text-sm text-white placeholder:text-zinc-500 focus:border-zinc-500 focus:bg-zinc-800/60 transition-all"/>
+        <input v-model="filter" type="text" placeholder="Buscar planes..." class="w-full pl-10 pr-4 h-11 bg-zinc-800/40 border border-zinc-700/50 rounded-xl outline-none text-sm text-white placeholder:text-zinc-500 focus:border-zinc-500 focus:bg-zinc-800/60 transition-all"/>
       </div>
 
       <div class="flex items-center gap-3 w-full md:w-auto">
@@ -82,7 +92,7 @@ onMounted(cargarPlanes)
 
           <tbody class="divide-y divide-zinc-800/50">
 
-            <tr v-for="planes in listaPlanes" :key="planes.id" class="hover:bg-zinc-800/20 transition-colors group">
+            <tr v-for="planes in filtrarPlanes" :key="planes.id" class="hover:bg-zinc-800/20 transition-colors group">
               <td class="py-4 px-6 text-white font-semibold">{{ planes.nombre }}</td>
               <td class="py-4 px-6">{{ planes.quincenas }}</td>
               <td class="py-4 px-6">{{ planes.interes }}%</td>
