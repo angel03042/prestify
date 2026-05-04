@@ -10,8 +10,15 @@ const showModal = ref(false);
 const isDeleteModalOpen = ref(false);
 const isUpdateModalOpen = ref(false);
 
+const planSeleccionado = ref(null)
+
 const listaPlanes = ref([])
 const cargando = ref(true);
+
+const abrirModalUpdate = (plan) => {
+  isUpdateModalOpen.value = true
+  planSeleccionado.value = plan
+}
 
 const cargarPlanes = async () => {
   cargando.value = true
@@ -76,7 +83,7 @@ onMounted(cargarPlanes)
               <td class="py-4 px-6">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <!-- Editar -->
-                  <button @click="isUpdateModalOpen = true" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all">
+                  <button @click="abrirModalUpdate(planes)" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
                       <path d="m15 5 4 4"/>
@@ -106,6 +113,6 @@ onMounted(cargarPlanes)
 
   <ModalAddPlan v-if="showModal" @close="showModal = false" @plan-added="cargarPlanes"/>
   <ModalDeletePlan v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false" />
-  <ModalUpdatePlan v-if="isUpdateModalOpen" @close="isUpdateModalOpen = false"/>
+  <ModalUpdatePlan v-if="isUpdateModalOpen" :planes="planSeleccionado" @close="isUpdateModalOpen = false" @updated-close="cargarPlanes"/>
 
 </template>

@@ -1,17 +1,52 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { updatePlan } from '@/services/supabase/planes/updatePlan.js'
+import { ref, computed, reactive, onMounted } from 'vue';
 
-defineEmits(['close']);
+const props = defineProps({
+  planes: Object
+})
 
-const nombre = ref('');
-const quincenas = ref('');
-const interes = ref(0);
+const emit = defineEmits(['close', 'updated-close']);
 
-// 🔥 cálculo automático
+const form = reactive({
+  nombre: '',
+  quincenas: '',
+  interes: 0,
+})
+
+const loading = ref(false);
+
+onMounted(() => {
+  if(props.planes) {
+    form.nombre = props.planes.nombre,
+    form.quincenas = props.planes.quincenas,
+    form.interes = props.planes.interes
+  }
+})
+
 const multiplicador = computed(() => {
-  if (!interes.value) return '0.0';
-  return (1 + (interes.value / 100)).toFixed(2);
+  const i = parseFloat(form.interes);
+  if (isNaN(i) || i === 0) return '1.00';
+  return (1 + (i / 100)).toFixed(2);
 });
+
+const update = async () => {
+  loading.value = true
+  try {
+    await updatePlan(props.planes.id, form.nombre, form.quincenas, form.interes, multiplicador.value);
+    Object.assign(form, {
+      nombre: '',
+      quincenas: '',
+      interes: '',
+    })
+    emit('updated-close')
+    emit('close')
+  } catch (error) {
+    console.error('Ocurrio un: ', error)
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -30,50 +65,30 @@ const multiplicador = computed(() => {
       <!-- Título -->
       <h2 class="text-white text-2xl font-semibold mb-6">Actualizar plan de préstamo</h2>
 
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <form @submit.prevent="update" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <!-- Nombre -->
         <div class="flex flex-col gap-2 md:col-span-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Nombre del plan</label>
-          <input 
-            v-model="nombre"
-            type="text"
-            placeholder="Ej. Plan 12 quincenas"
-            class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
-          >
+          <input v-model="form.nombre" type="text" placeholder="Ej. Plan 12 quincenas" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
         </div>
 
         <!-- Quincenas -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Quincenas</label>
-          <input 
-            v-model="quincenas"
-            type="number"
-            placeholder="Ej. 12"
-            class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
-          >
+          <input v-model="form.quincenas" type="number" placeholder="Ej. 12" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
         </div>
 
         <!-- Interés -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Interés (%)</label>
-          <input 
-            v-model="interes"
-            type="number"
-            placeholder="Ej. 50"
-            class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
-          >
+          <input v-model="form.interes" type="text" placeholder="Ej. 50" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
         </div>
 
         <!-- Multiplicador -->
         <div class="flex flex-col gap-2 md:col-span-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Multiplicador</label>
-          <input 
-            :value="multiplicador"
-            type="text"
-            class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed"
-            disabled
-          >
+          <input :value="multiplicador" type="text" class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed" disabled>
           <span class="text-xs text-zinc-500 ml-1">
             Se calcula automáticamente (Ej: 1.5 = +50%)
           </span>
@@ -81,24 +96,14 @@ const multiplicador = computed(() => {
 
         <!-- Botones -->
         <div class="md:col-span-2 mt-4 flex gap-3">
-          
-          <button 
-            type="button"
-            @click="$emit('close')"
-            class="flex-1 bg-zinc-800 text-zinc-300 font-semibold py-3 rounded-xl hover:bg-zinc-700 hover:text-white transition-all"
-          >
+          <button type="button" @click="$emit('close')" class="flex-1 bg-zinc-800 text-zinc-300 font-semibold py-3 rounded-xl hover:bg-zinc-700 hover:text-white transition-all">
             Cancelar
           </button>
 
-          <button 
-            type="submit"
-            class="flex-[2] bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition-all active:scale-[0.98] shadow-lg shadow-white/5"
-          >
+          <button :disabled="loading" type="submit" class="flex-[2] bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition-all active:scale-[0.98] shadow-lg shadow-white/5">
             Actualizar plan
           </button>
-
         </div>
-
       </form>
     </div>
   </div>
