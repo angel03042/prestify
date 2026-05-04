@@ -2,7 +2,7 @@
 import ModalVerPrestamo from '@/components/dashboard/ModalVerPrestamo.vue'
 import ModalPagoPrestamo from '@/components/dashboard/ModalPagoPrestamo.vue'
 import ModalDeletePrestamo from '@/components/dashboard/ModalDeletePrestamo.vue'
-import ModalNewPrestamo from '@/components/dashboard/ModalNewPago.vue'
+import ModalNewPrestamo from '@/components/dashboard/ModalNewPrestamo.vue'
 import { ref } from 'vue'
 
 const showModal = ref(false)
