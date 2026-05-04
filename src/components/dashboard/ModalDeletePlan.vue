@@ -1,5 +1,28 @@
 <script setup>
-defineEmits(['close'])
+import { deletePlan } from '@/services/supabase/planes/deletePlan.js'
+import { ref } from 'vue'
+
+const props = defineProps({
+  id: Number
+})
+
+const loading = ref(false);
+
+const emit = defineEmits(['close', 'deleted-close'])
+
+const confirmDelete = async () => {
+  if (!props.id) return;
+  loading.value = true
+  try {
+    await deletePlan(props.id)
+    emit('deleted-close')
+    emit('close')
+  } catch (error) {
+    console.error('Ocurrio un: ', error)
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
@@ -20,17 +43,10 @@ defineEmits(['close'])
     </div>
 
     <div class="flex flex-col gap-2">
-      <button 
-        class="w-full bg-red-500 text-white py-4 rounded-2xl font-bold text-sm hover:bg-red-600 transition-all active:scale-95 shadow-lg shadow-red-500/20"
-        onclick="confirmDelete()"
-      >
+      <button :disabled="loading" @click="confirmDelete" class="w-full bg-red-500 text-white py-4 rounded-2xl font-bold text-sm hover:bg-red-600 transition-all active:scale-95 shadow-lg shadow-red-500/20">
         Sí, eliminar Plan
       </button>
-      <button 
-        @click="$emit('close')"
-        class="w-full py-4 text-zinc-500 font-bold text-sm hover:text-white transition-all"
-        onclick="toggleModal('modal-delete-product')"
-      >
+      <button @click="$emit('close')" class="w-full py-4 text-zinc-500 font-bold text-sm hover:text-white transition-all" >
         Cancelar
       </button>
     </div>

@@ -5,12 +5,14 @@ import ModalUpdatePlan from '@/components/dashboard/ModalUpdatePlan.vue'
 import ModalDeletePlan from '@/components/dashboard/ModalDeletePlan.vue'
 
 import { readPlan } from '@/services/supabase/planes/readPlan.js'
+import { deletePlan } from '../services/supabase/planes/deletePlan';
 
 const showModal = ref(false);
 const isDeleteModalOpen = ref(false);
 const isUpdateModalOpen = ref(false);
 
 const planSeleccionado = ref(null)
+const planDelete = ref(null)
 
 const listaPlanes = ref([])
 const cargando = ref(true);
@@ -18,6 +20,11 @@ const cargando = ref(true);
 const abrirModalUpdate = (plan) => {
   isUpdateModalOpen.value = true
   planSeleccionado.value = plan
+}
+
+const abrirModalDelete = (plan) => {
+  isDeleteModalOpen.value = true
+  planDelete.value = plan
 }
 
 const cargarPlanes = async () => {
@@ -90,7 +97,7 @@ onMounted(cargarPlanes)
                     </svg>
                   </button>
                   <!-- Eliminar -->
-                  <button @click="isDeleteModalOpen = true" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
+                  <button @click="abrirModalDelete(planes.id)" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M3 6h18"/>
                       <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
@@ -112,7 +119,7 @@ onMounted(cargarPlanes)
   </section>
 
   <ModalAddPlan v-if="showModal" @close="showModal = false" @plan-added="cargarPlanes"/>
-  <ModalDeletePlan v-if="isDeleteModalOpen" @close="isDeleteModalOpen = false" />
+  <ModalDeletePlan v-if="isDeleteModalOpen" :id="planDelete" @close="isDeleteModalOpen = false" @deleted-close="cargarPlanes"/>
   <ModalUpdatePlan v-if="isUpdateModalOpen" :planes="planSeleccionado" @close="isUpdateModalOpen = false" @updated-close="cargarPlanes"/>
 
 </template>
