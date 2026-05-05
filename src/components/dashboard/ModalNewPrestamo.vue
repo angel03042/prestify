@@ -1,9 +1,12 @@
 <script setup>
 import { readClients } from '@/services/supabase/clients/readClients.js';
 import { readPlan } from '@/services/supabase/planes/readPlan.js'
+
+import { insertPrestamo } from '@/services/supabase/prestamos/insertPrestamo.js'
+
 import { ref, onMounted, reactive, computed } from 'vue';
 
-defineEmits(['close']);
+const emit = defineEmits(['close', 'inserts-close']);
 
 const form = reactive({
   cliente_id: '',
@@ -14,6 +17,26 @@ const form = reactive({
 const clientes = ref([]);
 const planes = ref([]);
 
+const loading = ref(false)
+
+const addPrestamo = async () => {
+  loading.value = true
+  try {
+    await insertPrestamo(form.cliente_id, form.monto, totalAPagar.value, planSeleccionado.value.quincenas, cuotaQuincenal.value);
+    Object.assign(form, {
+      cliente_id: '',
+      plan_id: '',
+      monto: 0
+    })
+    emit('insert-close')
+    emit('close')
+  } catch (error) {
+    console.error('Ocurrio un: ', error)
+  } finally {
+    loading.value = false
+  }
+}
+
 onMounted( async () => {
   try {
     const [resClientes, resPlanes] = await Promise.all([readClients(), readPlan()])
@@ -23,6 +46,24 @@ onMounted( async () => {
     console.error('Ocurrio un: ', error)
   }
 })
+
+const clientesInactivos = computed(() => {
+  return clientes.value.filter(cliente => cliente.status === 'Inactivo')
+})
+
+const clienteSeleccionado = computed(() => {
+  return clientes.value.find(p => p.id === form.cliente_id)
+})
+
+const validarMonto = () => {
+  if (!clienteSeleccionado.value) return
+
+  const max = clienteSeleccionado.value.credito
+
+  if (Number(form.monto) > max) {
+    form.monto = max
+  }
+}
 
 // Lógica de cálculo
 const planSeleccionado = computed(() => {
@@ -56,27 +97,27 @@ const cuotaQuincenal = computed(() => {
       <!-- Título -->
       <h2 class="text-white text-2xl font-semibold mb-6">Registrar préstamo</h2>
 
-      <form class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <form @submit.prevent="addPrestamo" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <!-- Cliente -->
         <div class="flex flex-col gap-2 md:col-span-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Cliente</label>
           <select v-model="form.cliente_id" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
-            <option>Seleccione un cliente</option>
-            <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+            <option value="" disabled>Seleccione un cliente</option>
+            <option v-for="cliente in clientesInactivos" :key="cliente.id" :value="cliente.id">{{ cliente.nombre }} {{ cliente.apellido }}</option>
           </select>
         </div>
 
         <!-- Monto -->
         <div class="flex flex-col gap-2">
-          <label class="text-zinc-400 text-sm font-medium ml-1">Monto prestado</label>
-          <input v-model="form.monto" type="number" placeholder="0.00" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
+          <label class="text-zinc-400 text-sm font-medium ml-1">Monto prestado <span v-if="form.cliente_id" class="text-green-400 ml-4">${{ clienteSeleccionado?.credito }}</span></label>
+          <input v-model="form.monto" @input="validarMonto" type="number" placeholder="0.00" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
         </div>
 
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Quincenas</label>
           <select v-model="form.plan_id" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
-            <option>Seleccione una opcion</option>
+            <option value="" disabled>Seleccione una opcion</option>
             <option v-for="plan in planes" :key="plan.id" :value="plan.id">{{ plan.nombre }}</option>
           </select>
         </div>
@@ -84,29 +125,22 @@ const cuotaQuincenal = computed(() => {
         <!-- pagos -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Pagos quincenales</label>
-          <input :value="cuotaQuincenal.toFixed(2)" type="number" placeholder="Auto calculado" class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed" disabled>
+          <input :value="cuotaQuincenal.toFixed(2)" type="text" placeholder="Auto calculado" class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed" disabled>
         </div>
 
         <!-- Total -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Total a pagar</label>
-          <input :value="totalAPagar.toFixed(2)" type="number" placeholder="Auto calculado" class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed" disabled>
+          <input :value="totalAPagar.toFixed(2)" type="text" placeholder="Auto calculado" class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed" disabled>
         </div>
 
         <!-- Botones -->
         <div class="md:col-span-2 mt-4 flex gap-3">
-          <button 
-            type="button"
-            @click="$emit('close')"
-            class="flex-1 bg-zinc-800 text-zinc-300 font-semibold py-3 rounded-xl hover:bg-zinc-700 hover:text-white transition-all"
-          >
+          <button type="button" @click="$emit('close')" class="flex-1 bg-zinc-800 text-zinc-300 font-semibold py-3 rounded-xl hover:bg-zinc-700 hover:text-white transition-all">
             Cancelar
           </button>
 
-          <button 
-            type="submit"
-            class="flex-[2] bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition-all active:scale-[0.98] shadow-lg shadow-white/5"
-          >
+          <button :disabled="loading" type="submit" class="flex-[2] bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition-all active:scale-[0.98] shadow-lg shadow-white/5">
             Registrar préstamo
           </button>
         </div>
