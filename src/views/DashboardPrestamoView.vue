@@ -3,7 +3,22 @@ import ModalVerPrestamo from '@/components/dashboard/ModalVerPrestamo.vue'
 import ModalPagoPrestamo from '@/components/dashboard/ModalPagoPrestamo.vue'
 import ModalDeletePrestamo from '@/components/dashboard/ModalDeletePrestamo.vue'
 import ModalNewPrestamo from '@/components/dashboard/ModalNewPrestamo.vue'
-import { ref } from 'vue'
+
+import { readPrestamo } from '@/services/supabase/prestamos/readPrestamo.js'
+
+import { ref, onMounted } from 'vue'
+
+const listaPrestamos = ref([]);
+
+const prestamos = async () => {
+  try {
+    listaPrestamos.value = await readPrestamo();
+  } catch (error) {
+    console.error('Ocurrio un: ', error)
+  }
+}
+
+onMounted(prestamos)
 
 const showModal = ref(false)
 const isViewOpen = ref(false)
@@ -52,22 +67,16 @@ const isPagoOpen = ref(false)
 
           <tbody class="divide-y divide-zinc-800/50">
             
-            <tr class="hover:bg-zinc-800/20 group transition-colors">
-              
+            <tr v-for="cliente in listaPrestamos" :key="prestamo" class="hover:bg-zinc-800/20 group transition-colors">
               <td class="py-4 px-6 text-white font-medium">
-                Angel Francisco Benitez Ramirez
+                {{ cliente.nombre }} {{ cliente.apellido }}
               </td>
-
-              <td class="py-4 px-6 text-white">$2,000</td>
-
-              <td class="py-4 px-6 text-zinc-300">8</td>
-
-              <td class="py-4 px-6 text-zinc-400">29 Abr 2026</td>
-
+              <td class="py-4 px-6 text-white">${{ Number(cliente.prestamos.monto).toLocaleString() }}</td>
+              <td class="py-4 px-6 text-zinc-300">{{ cliente.prestamos.quincenas }}</td>
+              <td class="py-4 px-6 text-zinc-400">{{ new Date(cliente.created_at).toLocaleDateString('es-MX') }}</td>
               <td class="py-4 px-6 text-emerald-400 font-medium">
-                Activo
+                {{ cliente.status }}
               </td>
-
               <td class="py-4 px-6">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   
