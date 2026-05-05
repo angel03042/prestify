@@ -1,9 +1,15 @@
 <script setup>
 import { readClients } from '@/services/supabase/clients/readClients.js';
 import { readPlan } from '@/services/supabase/planes/readPlan.js'
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive, computed } from 'vue';
 
 defineEmits(['close']);
+
+const form = reactive({
+  cliente_id: '',
+  plan_id: '',
+  monto: 0
+})
 
 const clientes = ref([]);
 const planes = ref([]);
@@ -17,6 +23,21 @@ onMounted( async () => {
     console.error('Ocurrio un: ', error)
   }
 })
+
+// Lógica de cálculo
+const planSeleccionado = computed(() => {
+  return planes.value.find(p => p.id === form.plan_id);
+});
+
+const totalAPagar = computed(() => {
+  if (!form.monto || !planSeleccionado.value) return 0;
+  return form.monto * planSeleccionado.value.multiplicador;
+});
+
+const cuotaQuincenal = computed(() => {
+  if (!totalAPagar.value || !planSeleccionado.value) return 0;
+  return totalAPagar.value / planSeleccionado.value.quincenas;
+});
 </script>
 
 <template>
@@ -40,7 +61,7 @@ onMounted( async () => {
         <!-- Cliente -->
         <div class="flex flex-col gap-2 md:col-span-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Cliente</label>
-          <select class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
+          <select v-model="form.cliente_id" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
             <option>Seleccione un cliente</option>
             <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">{{ cliente.nombre }} {{ cliente.apellido }}</option>
           </select>
@@ -49,41 +70,27 @@ onMounted( async () => {
         <!-- Monto -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Monto prestado</label>
-          <input 
-            type="number"
-            placeholder="0.00"
-            class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
-          >
+          <input v-model="form.monto" type="number" placeholder="0.00" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
         </div>
 
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Quincenas</label>
-          <select class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
+          <select v-model="form.plan_id" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
             <option>Seleccione una opcion</option>
             <option v-for="plan in planes" :key="plan.id" :value="plan.id">{{ plan.nombre }}</option>
           </select>
         </div>
 
-        <!-- Interés -->
+        <!-- pagos -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Pagos quincenales</label>
-          <input 
-            type="number"
-            placeholder="Auto calculado"
-            class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed"
-            disabled
-          >
+          <input :value="cuotaQuincenal.toFixed(2)" type="number" placeholder="Auto calculado" class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed" disabled>
         </div>
 
         <!-- Total -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Total a pagar</label>
-          <input 
-            type="number"
-            placeholder="Auto calculado"
-            class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed"
-            disabled
-          >
+          <input :value="totalAPagar.toFixed(2)" type="number" placeholder="Auto calculado" class="bg-zinc-800/30 border border-zinc-700 text-zinc-400 rounded-lg px-4 py-2.5 cursor-not-allowed" disabled>
         </div>
 
         <!-- Botones -->
