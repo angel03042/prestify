@@ -9,21 +9,32 @@ import { readPrestamo } from '@/services/supabase/prestamos/readPrestamo.js'
 import { ref, onMounted } from 'vue'
 
 const listaPrestamos = ref([]);
+const clienteSeleccionado = ref(null)
 
-const prestamos = async () => {
+const isViewOpen = ref(false)
+const showModal = ref(false)
+const isDeleteOpen = ref(false)
+const isPagoOpen = ref(false)
+
+const cargando = ref(true);
+
+const cargarPrestamos = async () => {
+  cargando.value = true
   try {
     listaPrestamos.value = await readPrestamo();
   } catch (error) {
     console.error('Ocurrio un: ', error)
+  } finally {
+    cargando.value = false;
   }
 }
 
-onMounted(prestamos)
+const abrirModalPrestamo = (cliente) => {
+  isViewOpen.value = true;
+  clienteSeleccionado.value = cliente
+}
 
-const showModal = ref(false)
-const isViewOpen = ref(false)
-const isDeleteOpen = ref(false)
-const isPagoOpen = ref(false)
+onMounted(cargarPrestamos)
 </script>
 
 <template>
@@ -67,7 +78,7 @@ const isPagoOpen = ref(false)
 
           <tbody class="divide-y divide-zinc-800/50">
             
-            <tr v-for="cliente in listaPrestamos" :key="prestamo" class="hover:bg-zinc-800/20 group transition-colors">
+            <tr v-for="cliente in listaPrestamos" :key="cliente" class="hover:bg-zinc-800/20 group transition-colors">
               <td class="py-4 px-6 text-white font-medium">
                 {{ cliente.nombre }} {{ cliente.apellido }}
               </td>
@@ -81,7 +92,7 @@ const isPagoOpen = ref(false)
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   
                   <!-- VER -->
-                  <button @click="isViewOpen = true" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg" title="Ver">
+                  <button @click="abrirModalPrestamo(cliente)" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg" title="Ver">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
                   </button>
 
@@ -99,6 +110,12 @@ const isPagoOpen = ref(false)
               </td>
 
             </tr>
+            <!-- Estado vacío o carga -->
+            <tr v-if="listaPrestamos.length === 0 && !cargando">
+              <td colspan="6" class="py-10 text-center text-zinc-500">
+                No se encontraron prestamos.
+              </td>
+            </tr>
 
           </tbody>
         </table>
@@ -107,8 +124,8 @@ const isPagoOpen = ref(false)
     </div>
 
   </section>
-  <ModalVerPrestamo v-if="isViewOpen" @close="isViewOpen = false"/>
+  <ModalVerPrestamo v-if="isViewOpen" :cliente="clienteSeleccionado" @close="isViewOpen = false"/>
   <ModalPagoPrestamo v-if="isPagoOpen" @close="isPagoOpen = false"/>
   <ModalDeletePrestamo v-if="isDeleteOpen" @close="isDeleteOpen = false"/>
-  <ModalNewPrestamo v-if="showModal" @close="showModal = false"/>
+  <ModalNewPrestamo v-if="showModal" @close="showModal = false" @inserts-close="cargarPrestamos"/>
 </template>

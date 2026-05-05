@@ -28,7 +28,7 @@ const addPrestamo = async () => {
       plan_id: '',
       monto: 0
     })
-    emit('insert-close')
+    emit('inserts-close')
     emit('close')
   } catch (error) {
     console.error('Ocurrio un: ', error)

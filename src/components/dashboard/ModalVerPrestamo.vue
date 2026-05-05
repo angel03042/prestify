@@ -1,4 +1,11 @@
 <script setup>
+import { verPrestamo } from '@/services/supabase/prestamos/verPrestamo.js'
+import { computed } from 'vue'
+
+const props = defineProps({
+  cliente: Object
+})
+
 defineEmits(['close'])
 </script>
 
@@ -20,42 +27,42 @@ defineEmits(['close'])
         
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Cliente</span>
-          <span class="text-white font-medium">Angel Francisco Benitez Ramirez</span>
+          <span class="text-white font-medium">{{ cliente.nombre }} {{ cliente.apellido }}</span>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Prestamo</span>
-          <span class="text-white font-medium">$2,000</span>
+          <span class="text-white font-medium">$ {{ Number(cliente.prestamos?.monto).toLocaleString() }}</span>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Total a pagar</span>
-          <span class="text-white font-medium">$2,200</span>
+          <span class="text-white font-medium">$ {{ Number(cliente.prestamos?.total_pagar).toLocaleString() }}</span>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Quincenas</span>
-          <span class="text-white font-medium">8</span>
+          <span class="text-white font-medium">{{ cliente.prestamos?.quincenas }}</span>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Saldo restante</span>
-          <span class="text-amber-400 font-medium">$1,200</span>
+          <span class="text-amber-400 font-medium">$ {{ Number(cliente.prestamos?.saldo_pendiente).toLocaleString() }}</span>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Pagos</span>
-          <span class="text-white">$ 275</span>
+          <span class="text-white">$ {{ Number(cliente.prestamos?.pagos_quincenal).toLocaleString() }}</span>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Fecha</span>
-          <span class="text-white">29 Abril 2026</span>
+          <span class="text-white">{{ new Date(cliente.created_at).toLocaleDateString('es-MX', {year: 'numeric', month: 'long',day: 'numeric'}) }}</span>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Estado</span>
-          <span class="text-emerald-400 font-medium">Activo</span>
+          <span class="text-emerald-400 font-medium">{{ cliente.prestamos.status }}</span>
         </div>
 
       </div>

@@ -25,6 +25,7 @@ export const insertPrestamo = async (cliente_id, monto, total_pagar, quincenas, 
         total_pagar: parseFloat(total_pagar),
         quincenas: parseInt(quincenas),
         pagos_quincenal: parseFloat(pagos_quincenal),
+        saldo_pendiente: parseFloat(total_pagar),
       },
     ])
     .select();
