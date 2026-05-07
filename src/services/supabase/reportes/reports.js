@@ -4,9 +4,6 @@ import { getCurrent } from "@/services/auth/getUser.js";
 export const getReportData = async () => {
   const user = await getCurrent();
 
-  // Traemos los préstamos y anidamos la info del cliente
-  // Nota: Si la relación es 1:1 desde clientes, la consulta puede variar.
-  // Aquí asumo que prestamos tiene los datos base.
   let { data: prestamos, error } = await supa
     .from("prestamos")
     .select(`
@@ -18,11 +15,11 @@ export const getReportData = async () => {
       quincenas,
       status,
       saldo_pendiente,
-      clientes (
+      clientes!prestamos_cliente_id_fkey (
         nombre,
         apellido
       )
-    `)
+    `) // <--- Agregamos !nombre_de_la_llave_foranea
     .eq("user_id", user.id);
 
   if (error) throw error;
