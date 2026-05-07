@@ -1,9 +1,48 @@
 <script setup>
-import { ref } from 'vue'
+import { updatePrestamo } from '@/services/supabase/prestamos/updatePrestamo.js'
+import { ref, reactive, onMounted } from 'vue'
 
-defineEmits(['close'])
+const props = defineProps({
+  cliente: Object
+})
 
-const monto = ref('')
+const emit = defineEmits(['close', 'pago-registrado']) // Emitimos evento para refrescar tabla
+
+const loading = ref(false)
+const form = reactive({
+  monto: 0,
+  metodo_pago: 'Efectivo'
+})
+
+onMounted(() => {
+  if (props.cliente?.prestamos) {
+    form.monto = props.cliente.prestamos.pagos_quincenal;
+  }
+})
+
+const addPago = async () => {
+  if (form.monto <= 0 || !form.metodo_pago) return;
+  
+  loading.value = true;
+  try {
+    await updatePrestamo(
+      props.cliente.prestamos.id, 
+      form.monto, 
+      form.metodo_pago, 
+      props.cliente.prestamos.pagos_realizados, 
+      props.cliente.prestamos.quincenas, 
+      props.cliente.prestamos.saldo_pendiente,
+      props.cliente.prestamos.monto
+    )
+    
+    emit('pago-registrado');
+    emit('close');
+  } catch (error) {
+    alert(error.message || "Error al registrar pago");
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -20,29 +59,29 @@ const monto = ref('')
 
       <h2 class="text-white text-2xl font-semibold mb-6">Registrar pago</h2>
 
-      <form @submit.prevent="" class="grid gap-6">
+      <form @submit.prevent="addPago" class="grid gap-6">
 
         <div  class="grid grid-cols-2 gap-6">
             <!-- Cliente -->
             <div class="flex flex-col gap-1">
                 <span class="text-zinc-500 text-sm">Cliente</span>
-                <span class="text-white font-medium">Juan Pérez</span>
+                <span class="text-white font-medium">{{ cliente.nombre }} {{ cliente.apellido }}</span>
             </div>
 
             <div class="flex flex-col gap-1">
                 <span class="text-zinc-500 text-sm">Pago</span>
-                <span class="text-green-400 font-medium">$ 275</span>
+                <span class="text-green-400 font-medium">$ {{ Number((cliente.prestamos.pagos_quincenal)).toFixed(2) }}</span>
             </div>
 
             <!-- Deuda actual -->
             <div class="flex flex-col gap-1">
                 <span class="text-zinc-500 text-sm">Saldo pendiente</span>
-                <span class="text-amber-400 font-medium">$1,200</span>
+                <span class="text-amber-400 font-medium">$ {{ Number(cliente.prestamos.saldo_pendiente).toLocaleString() }}</span>
             </div>
 
             <div class="flex flex-col gap-1">
                 <span class="text-zinc-500 text-sm">Pagos realizados</span>
-                <span class="text-blue-400 font-medium">2/8</span>
+                <span class="text-blue-400 font-medium">{{ cliente.prestamos.pagos_realizados }} / {{ cliente.prestamos.quincenas }}</span>
             </div>
         </div>
         
@@ -51,20 +90,16 @@ const monto = ref('')
         <!-- Monto -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Monto a pagar</label>
-          <input 
-            v-model="monto"
-            type="number" 
-            placeholder="0.00"
-            class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all placeholder:text-zinc-600"
-          >
+          <input v-model="form.monto" type="text" placeholder="0.00" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all placeholder:text-zinc-600">
         </div>
 
         <!-- Método -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Método de pago</label>
-          <select class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
-            <option>Efectivo</option>
-            <option>Transferencia</option>
+          <select v-model="form.metodo_pago" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+            <option value="" disabled="">Seleccione un metodo de pago</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Transferencia">Transferencia</option>
           </select>
         </div>
 

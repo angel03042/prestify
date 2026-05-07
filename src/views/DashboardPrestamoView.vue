@@ -10,6 +10,7 @@ import { ref, onMounted } from 'vue'
 
 const listaPrestamos = ref([]);
 const clienteSeleccionado = ref(null)
+const clientePagoSeleccionado = ref(null)
 
 const isViewOpen = ref(false)
 const showModal = ref(false)
@@ -32,6 +33,11 @@ const cargarPrestamos = async () => {
 const abrirModalPrestamo = (cliente) => {
   isViewOpen.value = true;
   clienteSeleccionado.value = cliente
+}
+
+const abrirModalPago = (cliente) => {
+  isPagoOpen.value = true
+  clientePagoSeleccionado.value = cliente
 }
 
 onMounted(cargarPrestamos)
@@ -86,7 +92,7 @@ onMounted(cargarPrestamos)
               <td class="py-4 px-6 text-zinc-300">{{ cliente.prestamos.quincenas }}</td>
               <td class="py-4 px-6 text-zinc-400">{{ new Date(cliente.created_at).toLocaleDateString('es-MX') }}</td>
               <td class="py-4 px-6 text-emerald-400 font-medium">
-                {{ cliente.status }}
+                {{ cliente.prestamos.status }}
               </td>
               <td class="py-4 px-6">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -97,14 +103,14 @@ onMounted(cargarPrestamos)
                   </button>
 
                   <!-- REGISTRAR PAGO -->
-                  <button @click="isPagoOpen = true" class="p-2 text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg">
+                  <button @click="abrirModalPago(cliente)" class="p-2 text-zinc-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
                   </button>
 
                   <!-- ELIMINAR -->
-                  <button @click="isDeleteOpen = true" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg">
+                  <!-- <button @click="isDeleteOpen = true" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
-                  </button>
+                  </button> -->
 
                 </div>
               </td>
@@ -125,7 +131,7 @@ onMounted(cargarPrestamos)
 
   </section>
   <ModalVerPrestamo v-if="isViewOpen" :cliente="clienteSeleccionado" @close="isViewOpen = false"/>
-  <ModalPagoPrestamo v-if="isPagoOpen" @close="isPagoOpen = false"/>
+  <ModalPagoPrestamo v-if="isPagoOpen" :cliente="clientePagoSeleccionado" @close="isPagoOpen = false" @pago-registrado="cargarPrestamos"/>
   <ModalDeletePrestamo v-if="isDeleteOpen" @close="isDeleteOpen = false"/>
   <ModalNewPrestamo v-if="showModal" @close="showModal = false" @inserts-close="cargarPrestamos"/>
 </template>
