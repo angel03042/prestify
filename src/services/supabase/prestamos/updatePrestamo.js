@@ -19,6 +19,7 @@ export const updatePrestamo = async (id, montoPagado, metodo_pago, pagosActuales
   const saldoFinalFijo = parseFloat(nuevoSaldoPendiente.toFixed(2));
   const nuevoEstado = saldoFinalFijo <= 0 ? 'Pagado' : 'Activo';
 
+  // 1. Actualizar el préstamo
   const { data: dtPrestamo, error: errorPrestamo } = await supa
     .from("prestamos")
     .update({ 
@@ -34,25 +35,26 @@ export const updatePrestamo = async (id, montoPagado, metodo_pago, pagosActuales
 
   if (errorPrestamo) throw errorPrestamo;
 
+  // 2. Si el préstamo se liquidó (Pagado), restauramos crédito y status del cliente
   if (nuevoEstado === 'Pagado') {
-    
+    const prestamoData = dtPrestamo[0];
+
+    // Buscamos al cliente usando el cliente_id que ahora vive en el préstamo
     const { data: cliente, error: errorCliente } = await supa
       .from("clientes")
       .select("id, credito")
-      .eq("prestamo_id", id)
-      .eq("user_id", user.id)
+      .eq("id", prestamoData.cliente_id) // Relación directa
       .single();
 
     if (cliente && !errorCliente) {
-      const montoARestaurar = dtPrestamo[0].monto; 
-      const creditoRestaurado = parseFloat(cliente.credito) + parseFloat(montoARestaurar);
+      const creditoRestaurado = parseFloat(cliente.credito) + parseFloat(prestamoData.monto);
 
       await supa
         .from("clientes")
         .update({ 
           credito: creditoRestaurado,
-          status: 'Inactivo', 
-          prestamo_id: null 
+          status: 'Inactivo'
+          // Ya no ponemos prestamo_id: null porque esa columna la borraste
         })
         .eq("id", cliente.id);
     }

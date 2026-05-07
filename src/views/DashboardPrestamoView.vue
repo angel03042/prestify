@@ -131,7 +131,7 @@ onMounted(cargarPrestamos)
 
   </section>
   <ModalVerPrestamo v-if="isViewOpen" :prestamo="clienteSeleccionado" @close="isViewOpen = false"/>
-  <ModalPagoPrestamo v-if="isPagoOpen" :cliente="clientePagoSeleccionado" @close="isPagoOpen = false" @pago-registrado="cargarPrestamos"/>
+  <ModalPagoPrestamo v-if="isPagoOpen" :prestamo="clientePagoSeleccionado" @close="isPagoOpen = false" @pago-registrado="cargarPrestamos"/>
   <ModalDeletePrestamo v-if="isDeleteOpen" @close="isDeleteOpen = false"/>
   <ModalNewPrestamo v-if="showModal" @close="showModal = false" @inserts-close="cargarPrestamos"/>
 </template>
