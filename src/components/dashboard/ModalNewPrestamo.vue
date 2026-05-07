@@ -20,20 +20,35 @@ const planes = ref([]);
 const loading = ref(false)
 
 const addPrestamo = async () => {
-  loading.value = true
+  if (!form.cliente_id || !form.plan_id || form.monto <= 0) {
+    alert("Por favor completa todos los campos");
+    return;
+  }
+
+  loading.value = true;
   try {
-    await insertPrestamo(form.cliente_id, form.monto, totalAPagar.value, planSeleccionado.value.quincenas, cuotaQuincenal.value);
+    await insertPrestamo(
+      form.cliente_id, 
+      form.monto, 
+      totalAPagar.value, 
+      planSeleccionado.value.quincenas, 
+      cuotaQuincenal.value
+    );
+    
+    // Limpiar formulario
     Object.assign(form, {
       cliente_id: '',
       plan_id: '',
       monto: 0
-    })
-    emit('inserts-close')
-    emit('close')
+    });
+
+    emit('inserts-close'); // Este evento debe recargar tu tabla de préstamos
+    emit('close');
   } catch (error) {
-    console.error('Ocurrio un: ', error)
+    alert(error.message);
+    console.error('Error:', error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
