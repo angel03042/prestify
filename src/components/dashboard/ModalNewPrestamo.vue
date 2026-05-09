@@ -14,6 +14,8 @@ const form = reactive({
   monto: 0
 })
 
+const interesAdicional = ref(0)
+
 const clientes = ref([]);
 const planes = ref([]);
 
@@ -87,7 +89,7 @@ const planSeleccionado = computed(() => {
 
 const totalAPagar = computed(() => {
   if (!form.monto || !planSeleccionado.value) return 0;
-  return form.monto * planSeleccionado.value.multiplicador;
+  return (form.monto * planSeleccionado.value.multiplicador) + (interesAdicional.value * planSeleccionado.value.quincenas);
 });
 
 const cuotaQuincenal = computed(() => {
@@ -135,6 +137,11 @@ const cuotaQuincenal = computed(() => {
             <option value="" disabled>Seleccione una opcion</option>
             <option v-for="plan in planes" :key="plan.id" :value="plan.id">{{ plan.nombre }}</option>
           </select>
+        </div>
+
+        <div class="flex flex-col gap-2 md:col-span-2">
+          <label class="text-zinc-400 text-sm font-medium ml-1">Interes Adicional <span class="text-neutral-400 ml-4 font-light">Opcional</span></label>
+          <input v-model="interesAdicional" type="number" placeholder="0.00" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
         </div>
 
         <!-- pagos -->
