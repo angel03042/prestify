@@ -118,8 +118,15 @@ onMounted(cargarClientes);
               </td>
               <td class="py-4 px-6 text-zinc-200 font-medium">{{ cliente.telefono }}</td>
               <td class="py-4 px-6 text-emerald-500 font-medium">$ {{ Number(cliente.credito).toLocaleString() }}</td>
-              <td class="py-4 px-6"></td>
-              <td class="py-4 px-6 text-emerald-400 font-medium">{{ cliente.status }}</td>
+              <td class="py-4 px-6">
+                <span v-if="cliente.prestamos && cliente.prestamos.length > 0" class="text-zinc-100 font-medium">
+                  $ {{ Number(cliente.prestamos[0].monto).toLocaleString() }}
+                </span>
+                <span v-else class="text-zinc-600 italic text-sm">
+                  Sin deuda
+                </span>
+              </td>
+              <td class="py-4 px-6 font-medium" :class="cliente.status == 'Inactivo'? 'text-orange-400' : 'text-emerald-400 '">{{ cliente.status }}</td>
               <td class="py-4 px-6">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button @click="abrirModalUpdate(cliente)" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Editar">

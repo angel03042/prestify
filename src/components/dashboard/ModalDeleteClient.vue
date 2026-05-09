@@ -39,7 +39,7 @@ const confirmDelete = async () => {
     <div class="text-center space-y-2 mb-8">
       <h3 class="text-xl font-bold text-white tracking-tight">¿Eliminar cliente?</h3>
       <p class="text-sm text-zinc-500 leading-relaxed px-2">
-        Esta acción no se puede deshacer. El cliente se borrará permanentemente de tu inventario.
+        Esta acción no se puede deshacer. Si el cliente cuenta con prestamo activo no podra ser eliminado.
       </p>
     </div>
 
