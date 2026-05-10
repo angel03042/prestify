@@ -189,7 +189,7 @@ onMounted(cargarDashboard)</script>
       <div class="relative overflow-hidden bg-gradient-to-br from-indigo-600 to-violet-700 border border-white/10 rounded-2xl p-8 flex flex-col justify-between shadow-2xl">
         <div class="relative z-10">
           <div class="mb-4 inline-flex px-2 py-1 rounded bg-white/20 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-wider">
-            Actualizacion | Proximamente
+            Reportes | Pagos
           </div>
           <h3 class="text-2xl font-bold text-white mb-2">
             Como van tus prestamos hoy?
