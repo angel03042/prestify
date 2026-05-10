@@ -8,25 +8,35 @@ export const updatePrestamo = async (id, montoPagado, metodo_pago, pagosActuales
   const sActual = parseFloat(saldoActual);
   const mPagado = parseFloat(montoPagado);
 
-  if (pActuales >= qTotales || sActual <= 0.01) {
+  // Validación de seguridad
+  if (pActuales >= qTotales || sActual <= 0) {
     throw new Error("Este préstamo ya ha sido liquidado.");
   }
 
   const user = await getCurrent();
-
   const pagosRealizados = pActuales + 1;
-  const nuevoSaldoPendiente = sActual - mPagado;
-  const saldoFinalFijo = parseFloat(nuevoSaldoPendiente.toFixed(2));
-  const nuevoEstado = saldoFinalFijo <= 0 ? 'Pagado' : 'Activo';
 
-  // 1. Actualizar el préstamo
+  // LÓGICA ANTI-DECIMALES:
+  // Si es el último pago O si lo que paga es casi igual al saldo (diferencia menor a 1 peso)
+  // forzamos el saldo pendiente a 0 para absorber esos .04 o .33 sobrantes.
+  let nuevoSaldoPendiente = sActual - mPagado;
+
+  if (pagosRealizados === qTotales || nuevoSaldoPendiente < 1.00) {
+    nuevoSaldoPendiente = 0;
+  } else {
+    // Si no es el último, redondeamos normal a 2 decimales
+    nuevoSaldoPendiente = parseFloat(nuevoSaldoPendiente.toFixed(2));
+  }
+
+  const nuevoEstado = nuevoSaldoPendiente <= 0 ? 'Pagado' : 'Activo';
+
   const { data: dtPrestamo, error: errorPrestamo } = await supa
     .from("prestamos")
     .update({ 
       pagado: mPagado, 
       metodo_pago, 
       pagos_realizados: pagosRealizados, 
-      saldo_pendiente: saldoFinalFijo,
+      saldo_pendiente: nuevoSaldoPendiente, // Aquí irá el 0 limpio
       status: nuevoEstado 
     })
     .eq("id", id)
@@ -35,7 +45,7 @@ export const updatePrestamo = async (id, montoPagado, metodo_pago, pagosActuales
 
   if (errorPrestamo) throw errorPrestamo;
 
-  // 2. Si el préstamo se liquidó (Pagado), restauramos crédito y status del cliente
+  // Restaurar crédito al cliente si el estado es Pagado... (mantener tu lógica actual)
   if (nuevoEstado === 'Pagado') {
     const prestamoData = dtPrestamo[0];
 

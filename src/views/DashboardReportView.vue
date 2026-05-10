@@ -37,13 +37,12 @@ const gananciaProyectada = computed(() => {
 // KPI 4: GANANCIA OBTENIDA (El interés real cobrado hasta hoy)
 const gananciaReal = computed(() => {
   return prestamos.value.reduce((acc, curr) => {
-    // Calculamos cuánto del pago es interés
-    // Proporción de interés = (Total a pagar - Monto base) / Quincenas totales
-    const interesPorQuincena = (curr.total_pagar - curr.monto) / curr.quincenas
-    const ganado = interesPorQuincena * curr.pagos_realizados
-    return acc + ganado
-  }, 0)
-})
+    const interesTotal = curr.total_pagar - curr.monto;
+    const interesPorQuincena = interesTotal / curr.quincenas;
+    const ganado = interesPorQuincena * curr.pagos_realizados;
+    return acc + ganado;
+  }, 0).toFixed(2); // Forzamos 2 decimales al final
+});
 
 onMounted(cargarReportes)
 </script>
@@ -69,7 +68,7 @@ onMounted(cargarReportes)
       <!-- Total recuperado -->
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 shadow-sm">
         <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Total (Recuperado)</p>
-        <h3 class="text-3xl text-blue-400 font-semibold mt-2">${{ totalRecuperado.toLocaleString() }}</h3>
+        <h3 class="text-3xl text-blue-400 font-semibold mt-2">${{ Number(totalRecuperado).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <!-- Ganancia Proyectada -->
@@ -104,9 +103,9 @@ onMounted(cargarReportes)
               <td class="py-4 px-6 text-white font-medium">
                 {{ item.clientes?.nombre }} {{ item.clientes?.apellido }}
               </td>
-              <td class="py-4 px-6">${{ item.monto.toLocaleString() }}</td>
-              <td class="py-4 px-6 text-emerald-400/80">${{ item.total_pagar.toLocaleString() }}</td>
-              <td class="py-4 px-6 font-medium">${{ item.pagos_quincenal.toLocaleString() }}</td>
+              <td class="py-4 px-6">${{ Number(item.monto).toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</td>
+              <td class="py-4 px-6 text-emerald-400/80">${{ Number(item.total_pagar).toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</td>
+              <td class="py-4 px-6 font-medium">${{ Number(item.pagos_quincenal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
               <td class="py-4 px-6">
                 <span class="bg-zinc-800 px-2 py-1 rounded text-zinc-300 text-xs">
                   {{ item.pagos_realizados }} / {{ item.quincenas }}

@@ -24,11 +24,11 @@ export const insertPrestamo = async (cliente_id, monto, total_pagar, quincenas, 
       {
         user_id: user.id,
         cliente_id: cliente_id, // <--- Nueva columna vinculada
-        monto: parseFloat(monto),
-        total_pagar: parseFloat(total_pagar),
+        monto: parseFloat(monto).toFixed(2),
+        total_pagar: parseFloat(total_pagar).toFixed(2),
         quincenas: parseInt(quincenas),
-        pagos_quincenal: parseFloat(pagos_quincenal),
-        saldo_pendiente: parseFloat(total_pagar),
+        pagos_quincenal: parseFloat(pagos_quincenal).toFixed(2),
+        saldo_pendiente: parseFloat(total_pagar).toFixed(2),
         pagos_realizados: 0,
         status: 'Activo'
       },

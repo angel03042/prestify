@@ -14,7 +14,7 @@ const form = reactive({
   monto: 0
 })
 
-const interesAdicional = ref(0)
+const interesAdicional = ref(null)
 
 const clientes = ref([]);
 const planes = ref([]);
@@ -89,7 +89,14 @@ const planSeleccionado = computed(() => {
 
 const totalAPagar = computed(() => {
   if (!form.monto || !planSeleccionado.value) return 0;
-  return (form.monto * planSeleccionado.value.multiplicador) + (interesAdicional.value * planSeleccionado.value.quincenas);
+  
+  // Convertimos a número y usamos 0 si es null/undefined/vacío
+  const adicional = parseFloat(interesAdicional.value) || 0;
+  
+  const montoBaseConMultiplicador = form.monto * planSeleccionado.value.multiplicador;
+  const totalInteresExtra = adicional * planSeleccionado.value.quincenas;
+  
+  return montoBaseConMultiplicador + totalInteresExtra;
 });
 
 const cuotaQuincenal = computed(() => {
@@ -141,7 +148,7 @@ const cuotaQuincenal = computed(() => {
 
         <div class="flex flex-col gap-2 md:col-span-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Interes Adicional <span class="text-neutral-400 ml-4 font-light">Opcional</span></label>
-          <input v-model="interesAdicional" type="number" placeholder="0.00" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
+          <input v-model="interesAdicional" type="number" step="0.01" placeholder="0.00" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all">
         </div>
 
         <!-- pagos -->

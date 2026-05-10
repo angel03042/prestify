@@ -72,7 +72,7 @@ const c = computed(() => props.prestamo?.clientes);
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Cuota quincenal</span>
           <span class="text-white font-medium">
-            $ {{ Number(p?.pagos_quincenal).toLocaleString() }}
+            $ {{ Number((p?.pagos_quincenal).toLocaleString()).toFixed(2) }}
           </span>
         </div>
 

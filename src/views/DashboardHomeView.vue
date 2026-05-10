@@ -80,7 +80,7 @@ onMounted(cargarDashboard)</script>
         <p class="text-xs uppercase tracking-widest text-zinc-500 font-bold">
           Total Recuperado
         </p>
-        <h3 class="text-4xl font-bold text-white mt-1">${{ totalRecuperado.toLocaleString() }}</h3>
+        <h3 class="text-4xl font-bold text-white mt-1">${{ totalRecuperado.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <div class="group border border-zinc-700/50 rounded-2xl p-6 hover:border-amber-500/30 transition-all duration-300">
@@ -97,7 +97,7 @@ onMounted(cargarDashboard)</script>
         <p class="text-xs uppercase tracking-widest text-zinc-500 font-bold">
           Total prestado
         </p>
-        <h3 class="text-4xl font-bold text-amber-500 mt-1">${{ totalPrestado.toLocaleString() }}</h3>
+        <h3 class="text-4xl font-bold text-amber-500 mt-1">${{ totalPrestado.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <div class="group border border-zinc-700/50 rounded-2xl p-6 hover:border-blue-500/30 transition-all duration-300">
@@ -113,7 +113,7 @@ onMounted(cargarDashboard)</script>
         <p class="text-xs uppercase tracking-widest text-zinc-500 font-bold">
           Por cobrar
         </p>
-        <h3 class="text-4xl font-bold text-blue-500 mt-1">${{ porCobrar.toLocaleString() }}</h3>
+        <h3 class="text-4xl font-bold text-blue-500 mt-1">${{ porCobrar.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <div class="group border border-zinc-700/50 rounded-2xl p-6 hover:border-emerald-500/30 transition-all duration-300">

@@ -15,9 +15,16 @@ const form = reactive({
 })
 
 onMounted(() => {
-  // Ahora accedemos directamente a props.prestamo
   if (props.prestamo) {
-    form.monto = props.prestamo.pagos_quincenal;
+    // Si falta solo 1 pago por realizar, sugerimos el saldo pendiente total 
+    // para matar esos decimales de una vez.
+    const esUltimoPago = (props.prestamo.pagos_realizados + 1) === props.prestamo.quincenas;
+    
+    if (esUltimoPago) {
+      form.monto = props.prestamo.saldo_pendiente;
+    } else {
+      form.monto = props.prestamo.pagos_quincenal;
+    }
   }
 })
 
@@ -96,7 +103,7 @@ const addPago = async () => {
         <!-- Monto a cobrar hoy -->
         <div class="flex flex-col gap-2">
           <label class="text-zinc-400 text-sm font-medium ml-1">Monto a pagar</label>
-          <input v-model="form.monto" type="number" step="0.01" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-emerald-500/50 outline-none">
+          <input v-model="form.monto" type="text" step="0.01" class="bg-zinc-800/50 border border-zinc-700 text-white rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-emerald-500/50 outline-none">
         </div>
 
         <!-- Método -->
