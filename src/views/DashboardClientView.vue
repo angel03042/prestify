@@ -144,6 +144,20 @@ onMounted(cargarClientes);
                 </div>
               </td>
             </tr>
+            <!-- Estado de carga -->
+            <tr v-if="cargando" v-for="list in 3">
+              <td class="py-4 px-6"><span class="block h-6 w-44 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-20 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-12 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-12 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-10 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-2 px-6">
+                <div class="flex justify-end gap-6">
+                  <span class="block h-6 w-6 animate-pulse bg-zinc-700 rounded"></span>
+                  <span class="block h-6 w-6 animate-pulse bg-zinc-700 rounded"></span>
+                </div>
+              </td>
+            </tr>
             <!-- Estado vacío o carga -->
             <tr v-if="listaClientes.length === 0 && !cargando">
               <td colspan="6" class="py-10 text-center text-zinc-500">
