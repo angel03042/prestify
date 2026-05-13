@@ -62,25 +62,29 @@ onMounted(cargarReportes)
       <!-- Total prestado -->
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 shadow-sm">
         <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Total Prestado</p>
-        <h3 class="text-3xl text-white font-semibold mt-2">${{ totalPrestado.toLocaleString() }}</h3>
+        <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-2"></span>
+        <h3 v-else class="text-3xl text-white font-semibold mt-2">${{ totalPrestado.toLocaleString() }}</h3>
       </div>
 
       <!-- Total recuperado -->
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 shadow-sm">
         <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Total (Recuperado)</p>
-        <h3 class="text-3xl text-blue-400 font-semibold mt-2">${{ Number(totalRecuperado).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
+        <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-2"></span>
+        <h3 v-else class="text-3xl text-blue-400 font-semibold mt-2">${{ Number(totalRecuperado).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <!-- Ganancia Proyectada -->
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 shadow-sm">
         <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Interés Proyectado</p>
-        <h3 class="text-3xl text-indigo-400 font-semibold mt-2">${{ gananciaProyectada.toLocaleString() }}</h3>
+        <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-2"></span>
+        <h3 v-else class="text-3xl text-indigo-400 font-semibold mt-2">${{ gananciaProyectada.toLocaleString() }}</h3>
       </div>
 
       <!-- Ganancia Real (Obtenida) -->
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 border-l-emerald-500/50 border-l-4 shadow-sm">
         <p class="text-xs text-emerald-500 uppercase font-bold tracking-wider">Ganancia Real (Cobrada)</p>
-        <h3 class="text-3xl text-emerald-400 font-semibold mt-2">${{ gananciaReal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</h3>
+        <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-2"></span>
+        <h3 v-else class="text-3xl text-emerald-400 font-semibold mt-2">${{ gananciaReal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</h3>
       </div>
     </div>
 
@@ -116,6 +120,15 @@ onMounted(cargarReportes)
                   {{ item.status }}
                 </span>
               </td>
+            </tr>
+            <!-- Estado de carga -->
+            <tr v-if="cargando" v-for="list in 3">
+              <td class="py-4 px-6"><span class="block h-6 w-44 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-20 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-12 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-12 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-10 animate-pulse bg-zinc-700 rounded"></span></td>
+              <td class="py-4 px-6"><span class="block h-6 w-10 animate-pulse bg-zinc-700 rounded"></span></td>
             </tr>
           </tbody>
         </table>
