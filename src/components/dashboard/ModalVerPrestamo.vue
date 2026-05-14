@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { generateReceiptPDF } from '@/utils/generateReceipt.js'
 
 const props = defineProps({
   prestamo: Object
@@ -10,6 +11,10 @@ defineEmits(['close'])
 // Opcional: Una pequeña validación para evitar errores de renderizado
 const p = computed(() => props.prestamo);
 const c = computed(() => props.prestamo?.clientes);
+
+const descargar = () => {
+  generateReceiptPDF(p.value, c.value);
+}
 </script>
 
 <template>
@@ -95,9 +100,12 @@ const c = computed(() => props.prestamo?.clientes);
       </div>
 
       <!-- Footer -->
-      <div class="mt-8 flex">
+      <div class="mt-8 flex gap-4">
         <button @click="$emit('close')" class="w-full bg-zinc-800 text-zinc-300 font-semibold py-3 rounded-xl hover:bg-zinc-700 hover:text-white transition-all">
           Cerrar detalle
+        </button>
+        <button @click="descargar" class="w-full bg-neutral-200 text-black hover:bg-neutral-100 font-semibold py-3 rounded-xl transition-all">
+          Dercargar recibo
         </button>
       </div>
 
