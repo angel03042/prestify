@@ -54,8 +54,7 @@ onMounted(cargarPlanes)
 <template>
   <section class="flex flex-col overflow-auto bg-neutral-900">
 
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row justify-between items-center gap-4 px-2 py-6 border-b border-zinc-800/50">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-6 border-b border-zinc-800/50">
       
       <div class="relative flex items-center w-full max-w-md group">
         <div class="absolute left-3 text-zinc-500 group-focus-within:text-zinc-300 transition-colors">
@@ -68,17 +67,16 @@ onMounted(cargarPlanes)
       </div>
 
       <div class="flex items-center gap-3 w-full md:w-auto">
-        <button @click="showModal = true" class="flex-1 md:flex-none bg-white text-black px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-zinc-200 transition-all active:scale-95 shadow-lg shadow-white/5">
+        <button @click="showModal = true" class="w-full md:w-auto flex-1 md:flex-none bg-white text-black px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-zinc-200 transition-all active:scale-95 shadow-lg shadow-white/5">
           Nuevo Plan
         </button>
       </div>
     </div>
 
-    <!-- Tabla -->
     <div class="px-2 py-6">
-      <div class="overflow-hidden border border-zinc-800/50 rounded-2xl bg-zinc-900/50 backdrop-blur-sm">
+      <div class="overflow-x-auto custom-scrollbar border border-zinc-800/50 rounded-2xl bg-zinc-900/50 backdrop-blur-sm">
         
-        <table class="min-w-full text-sm text-zinc-400">
+        <table class="min-w-max w-full text-sm text-zinc-400">
           
           <thead>
             <tr class="bg-zinc-800/30 text-left">
@@ -93,20 +91,18 @@ onMounted(cargarPlanes)
           <tbody class="divide-y divide-zinc-800/50">
 
             <tr v-for="planes in filtrarPlanes" :key="planes.id" class="hover:bg-zinc-800/20 transition-colors group">
-              <td class="py-4 px-6 text-white font-semibold">{{ planes.nombre }}</td>
-              <td class="py-4 px-6">{{ planes.quincenas }}</td>
-              <td class="py-4 px-6">{{ planes.interes }}%</td>
-              <td class="py-4 px-6 text-zinc-200">{{ planes.multiplicador }}x</td>
-              <td class="py-4 px-6">
-                <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <!-- Editar -->
+              <td class="py-3 px-6 text-white font-semibold whitespace-nowrap">{{ planes.nombre }}</td>
+              <td class="py-3 px-6 whitespace-nowrap">{{ planes.quincenas }}</td>
+              <td class="py-3 px-6 whitespace-nowrap">{{ planes.interes }}%</td>
+              <td class="py-3 px-6 text-zinc-200 whitespace-nowrap">{{ planes.multiplicador }}x</td>
+              <td class="py-3 px-6">
+                <div class="flex justify-end gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
                   <button @click="abrirModalUpdate(planes)" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
                       <path d="m15 5 4 4"/>
                     </svg>
                   </button>
-                  <!-- Eliminar -->
                   <button @click="abrirModalDelete(planes.id)" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M3 6h18"/>
@@ -117,7 +113,7 @@ onMounted(cargarPlanes)
                 </div>
               </td>
             </tr>
-            <!-- Estado de carga -->
+            
             <tr v-if="cargando" v-for="list in 3">
               <td class="py-4 px-6"><span class="block h-6 w-20 animate-pulse bg-zinc-700 rounded"></span></td>
               <td class="py-4 px-6"><span class="block h-6 w-6 animate-pulse bg-zinc-700 rounded"></span></td>
@@ -130,11 +126,13 @@ onMounted(cargarPlanes)
                 </div>
               </td>
             </tr>
+            
             <tr v-if="listaPlanes.length === 0 && !cargando">
-              <td colspan="6" class="py-10 text-center text-zinc-500">
+              <td colspan="5" class="py-10 text-center text-zinc-500">
                 No se encontraron planes.
               </td>
             </tr>
+
           </tbody>
         </table>
       </div>
