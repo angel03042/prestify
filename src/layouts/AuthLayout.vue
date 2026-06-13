@@ -1,6 +1,6 @@
 <!-- layouts/AuthLayout.vue -->
 <template>
-  <section class="relative px-10 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen flex flex-col overflow-hidden">
+  <section class="relative px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen flex flex-col overflow-hidden">
 
     <!-- Botón regresar -->
     <!-- <a href="/" class="absolute text-white text-sm font-medium flex items-center gap-2 hover:text-neutral-300 transition mb-4">

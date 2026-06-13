@@ -76,8 +76,8 @@ const handleSubmit = async () => {
       </div>
 
       <p v-if="message" class="text-red-500 text-xs">{{ message }}</p>
-      <button :disabled="loading" type="submit" class="w-full bg-indigo-500 text-white py-3 rounded-xl">
-        Iniciar sesión
+      <button :disabled="loading" type="submit" :class="loading ? 'opacity-70' : 'opacity-100'" class="w-full bg-indigo-500 text-white py-3 rounded-xl">
+        {{ loading ? "Iniciando sesion..." : "Iniciar sesión" }}
       </button>
     </form>
 
