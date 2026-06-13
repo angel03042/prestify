@@ -1,21 +1,22 @@
 <script setup>
+import { ref } from 'vue'
 import Sidebar from '@/components/dashboard/Sidebar.vue'
 import Navbar from '@/components/dashboard/Navbar.vue'
+
+// Estado global para controlar el menú en móviles
+const isSidebarOpen = ref(false)
 </script>
 
 <template>
-  <div class="bg-neutral-900 min-h-screen grid grid-cols-[auto_1fr]">
+  <div class="bg-neutral-900 min-h-screen relative md:grid md:grid-cols-[auto_1fr]">
 
-    <!-- Sidebar fijo -->
-    <Sidebar />
+    <Sidebar :isOpen="isSidebarOpen" @close="isSidebarOpen = false" />
 
-    <div class="flex flex-col h-screen">
+    <div class="flex flex-col h-screen min-w-0">
 
-      <!-- Navbar fijo -->
-      <Navbar />
+      <Navbar @toggle-sidebar="isSidebarOpen = !isSidebarOpen" />
 
-      <!-- Contenido dinámico -->
-      <main class="custom-scrollbar flex-1 overflow-y-auto p-6">
+      <main class="custom-scrollbar flex-1 overflow-y-auto p-4 sm:p-6">
         <router-view />
       </main>
 
