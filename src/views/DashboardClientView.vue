@@ -119,15 +119,31 @@ onMounted(cargarClientes);
                   Sin deuda
                 </span>
               </td>
-              <td class="py-3 px-6 font-medium whitespace-nowrap" :class="cliente.status == 'Inactivo'? 'text-orange-400' : 'text-emerald-400 '">{{ cliente.status }}</td>
-              
+              <td class="py-3 px-6 font-medium whitespace-nowrap"
+                :class="{
+                  'text-emerald-400': cliente.status === 'Activo',
+                  'text-orange-400': cliente.status === 'Inactivo',
+                  'text-red-500': cliente.status === 'Bloqueado'}">
+                  {{ cliente.status }}
+              </td>
               <td class="py-3 px-6">
                 <div class="flex justify-end gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
                   <button @click="abrirModalUpdate(cliente)" class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Editar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                   </button>
-                  <button @click="abrirModalDelete(cliente)" class="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all" title="Eliminar">
+                  <!-- Eliminar (Inactivo) -->
+                  <button v-if="cliente.status === 'Inactivo'" @click="abrirModalDelete(cliente)" class="p-2 text-red-400 hover:text-white hover:bg-red-500/10 rounded-lg transition-all" title="Eliminar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                  </button>
+
+                  <!-- Bloquear (Activo) -->
+                  <button v-if="cliente.status === 'Activo'" @click="abrirModalDelete(cliente)" class="p-2 text-amber-400 hover:text-white hover:bg-amber-500/10 rounded-lg transition-all" title="Bloquear">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </button>
+
+                  <!-- Desbloquear (Bloqueado) -->
+                  <button v-if="cliente.status === 'Bloqueado'" @click="abrirModalDelete(cliente)" class="p-2 text-emerald-400 hover:text-white hover:bg-emerald-500/10 rounded-lg transition-all" title="Desbloquear">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 9.33-2.5"/></svg>
                   </button>
                 </div>
               </td>

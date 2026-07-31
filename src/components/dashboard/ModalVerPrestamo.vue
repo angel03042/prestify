@@ -77,7 +77,7 @@ const descargar = () => {
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Cuota quincenal</span>
           <span class="text-white font-medium">
-            $ {{ Number((p?.pagos_quincenal).toLocaleString()).toFixed(2) }}
+            $ {{ Number(p?.pagos_quincenal).toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
           </span>
         </div>
 
@@ -105,7 +105,7 @@ const descargar = () => {
           Cerrar detalle
         </button>
         <button @click="descargar" class="w-full bg-neutral-200 text-black hover:bg-neutral-100 font-semibold py-3 rounded-xl transition-all">
-          Dercargar recibo
+          Descargar recibo
         </button>
       </div>
 

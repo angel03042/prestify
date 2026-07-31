@@ -13,7 +13,8 @@ export const readPrestamo = async () => {
         nombre,
         apellido,
         credito,
-        telefono
+        telefono,
+        status
       )
     `)
     .eq("user_id", user.id)

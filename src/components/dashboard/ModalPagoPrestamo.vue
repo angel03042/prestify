@@ -39,7 +39,8 @@ const addPago = async () => {
       form.metodo_pago, 
       props.prestamo.pagos_realizados, 
       props.prestamo.quincenas, 
-      props.prestamo.saldo_pendiente
+      props.prestamo.saldo_pendiente,
+      props.prestamo.clientes?.status
     )
     
     emit('pago-registrado');
@@ -79,7 +80,7 @@ const addPago = async () => {
             <div class="flex flex-col gap-1">
                 <span class="text-zinc-500 text-sm">Cuota quincenal</span>
                 <span class="text-green-400 font-medium">
-                  $ {{ Number(prestamo.pagos_quincenal).toFixed(2) }}
+                  $ {{ Number(prestamo.pagos_quincenal).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                 </span>
             </div>
 
@@ -87,7 +88,7 @@ const addPago = async () => {
             <div class="flex flex-col gap-1">
                 <span class="text-zinc-500 text-sm">Saldo pendiente</span>
                 <span class="text-amber-400 font-medium">
-                  $ {{ Number(prestamo.saldo_pendiente).toLocaleString() }}
+                  $ {{ Number(prestamo.saldo_pendiente).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                 </span>
             </div>
 

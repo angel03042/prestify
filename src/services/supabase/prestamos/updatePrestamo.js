@@ -1,7 +1,7 @@
 import { supa } from "@/lib/supabase.js";
 import { getCurrent } from "@/services/auth/getUser.js";
 
-export const updatePrestamo = async (id, montoPagado, metodo_pago, pagosActuales, quincenasTotales, saldoActual) => {
+export const updatePrestamo = async (id, montoPagado, metodo_pago, pagosActuales, quincenasTotales, saldoActual, statusCliente) => {
   
   const pActuales = parseInt(pagosActuales);
   const qTotales = parseInt(quincenasTotales);
@@ -59,14 +59,22 @@ export const updatePrestamo = async (id, montoPagado, metodo_pago, pagosActuales
     if (cliente && !errorCliente) {
       const creditoRestaurado = parseFloat(cliente.credito) + parseFloat(prestamoData.monto);
 
-      await supa
+      if (statusCliente === 'Bloqueado') {
+        await supa
+        .from("clientes")
+        .update({ 
+          credito: creditoRestaurado,
+        })
+        .eq("id", cliente.id);
+      } else {
+        await supa
         .from("clientes")
         .update({ 
           credito: creditoRestaurado,
           status: 'Inactivo'
-          // Ya no ponemos prestamo_id: null porque esa columna la borraste
         })
         .eq("id", cliente.id);
+      }      
     }
   }
 
