@@ -1,9 +1,12 @@
 <script setup>
 import { getReportData } from '@/services/supabase/reportes/reports.js'
+import { generateReceiptPDF } from '@/utils/generateReceipt.js'
 import { ref, onMounted, computed } from 'vue'
 
 const prestamos = ref([])
 const cargando = ref(true)
+
+const loading = ref(false)
 
 const cargarReportes = async () => {
   try {
@@ -44,6 +47,19 @@ const gananciaReal = computed(() => {
   }, 0).toFixed(2); // Forzamos 2 decimales al final
 });
 
+const descargar = async (p, c) => {
+  if (!p || !c) return;
+
+  loading.value = true;
+
+  try {
+    generateReceiptPDF(p, c);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
+};
 onMounted(cargarReportes)
 </script>
 
@@ -93,6 +109,7 @@ onMounted(cargarReportes)
               <th class="py-4 px-6 text-[11px] text-zinc-500 uppercase font-bold tracking-wider">Cuota Q.</th>
               <th class="py-4 px-6 text-[11px] text-zinc-500 uppercase font-bold tracking-wider">Progreso</th>
               <th class="py-4 px-6 text-[11px] text-zinc-500 uppercase font-bold tracking-wider">Estatus</th>
+              <th class="py-4 px-6 text-[11px] text-zinc-500 uppercase font-bold tracking-wider text-right">Acciones</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-zinc-800/50">
@@ -112,6 +129,12 @@ onMounted(cargarReportes)
                  <span :class="item.status === 'Pagado' ? 'text-emerald-500' : 'text-amber-500'">
                   {{ item.status }}
                 </span>
+              </td>
+              <td class="py-4 px-6 text-right">
+                <button class="p-2 text-zinc-400 hover:text-white hover:bg-zinc-700 rounded-lg transition-all" title="Descargar Reporte" @click="descargar(item, item.clientes)" :disabled="loading">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 12v6"/><path d="M9 15l3 3 3-3"/>
+                  </svg>
+                </button>
               </td>
             </tr>
             
