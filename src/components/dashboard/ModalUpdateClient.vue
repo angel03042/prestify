@@ -1,6 +1,6 @@
 <script setup>
 import { updateClient } from '@/services/supabase/clients/updateClients.js';
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
 
 const props = defineProps({
   cliente: Object
@@ -24,7 +24,10 @@ onMounted(() => {
   }
 });
 
+const loading = ref(false);
+
 const update = async () => {
+  loading.value = true;
   try {
     await updateClient(props.cliente.id, form.nombre, form.apellido, form.telefono, form.credito);
     
@@ -32,6 +35,8 @@ const update = async () => {
     emit('close');  
   } catch (error) {
     console.error("Error al actualizar:", error);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
@@ -86,8 +91,15 @@ const update = async () => {
             Cancelar
           </button>
           
-          <button type="submit" class="flex-[2] bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition-all active:scale-[0.98] shadow-lg shadow-white/5">
-            Actualizar Cliente
+          <button :disabled="loading" type="submit" class="flex-[2] bg-white text-black font-bold py-3 rounded-xl hover:bg-zinc-200 transition-all active:scale-[0.98] shadow-lg shadow-white/5 disabled:opacity-50">
+            <span v-if="loading" class="flex items-center justify-center gap-2">
+              <svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Actualizando...
+            </span>
+            <span v-else>Actualizar</span>
           </button>
         </div>
 

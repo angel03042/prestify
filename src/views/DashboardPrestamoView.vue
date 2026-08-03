@@ -19,6 +19,7 @@ const isDeleteOpen = ref(false)
 const isPagoOpen = ref(false)
 
 const cargando = ref(true);
+const actualizando = ref(false);
 
 // Variable para enlazar con el input del buscador
 const filtroBusqueda = ref('');
@@ -35,14 +36,20 @@ const prestamosFiltrados = computed(() => {
   });
 });
 
-const cargarPrestamos = async () => {
-  cargando.value = true
+const cargarPrestamos = async (esInicial = false) => {
+  if(esInicial) {
+    cargando.value = true;
+  } else {
+    actualizando.value = true;
+  }
+
   try {
     listaPrestamos.value = await readPrestamo();
   } catch (error) {
     console.error('Ocurrio un error: ', error)
   } finally {
     cargando.value = false;
+    actualizando.value = false;
   }
 }
 
@@ -56,7 +63,7 @@ const abrirModalPago = (cliente) => {
   clientePagoSeleccionado.value = cliente
 }
 
-onMounted(cargarPrestamos)
+onMounted(() => cargarPrestamos(true))
 </script>
 
 <template>

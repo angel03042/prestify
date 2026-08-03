@@ -18,6 +18,7 @@ const clienteAEliminar = ref(null);
 
 const listaClientes = ref([]);
 const cargando = ref(true);
+const actualizando = ref(false);
 
 const clientesFiltrados = computed(() => {
   if (!filtroNombre.value) return listaClientes.value;
@@ -38,8 +39,12 @@ const abrirModalDelete = (cliente) => {
   isDeleteModalOpen.value = true;
 };
 
-const cargarClientes = async () => {
-  cargando.value = true;
+const cargarClientes = async (esInicial = false) => {
+  if(esInicial) {
+    cargando.value = true;
+  } else {
+    actualizando.value = true;
+  }
   try {
     const data = await readClients();
     listaClientes.value = data;
@@ -47,11 +52,12 @@ const cargarClientes = async () => {
     console.error("Error al cargar clientes:", error);
   } finally {
     cargando.value = false;
+    actualizando.value = false;
   }
 };
 
 // 3. Ejecutar al cargar la página
-onMounted(cargarClientes);
+onMounted(() => cargarClientes(true));
 </script>
 
 <template>
@@ -149,7 +155,7 @@ onMounted(cargarClientes);
               </td>
             </tr>
 
-            <tr v-if="cargando" v-for="list in 3">
+            <tr v-if="cargando" v-for="list in 3" :key="list">
               <td class="py-4 px-6"><span class="block h-6 w-44 animate-pulse bg-zinc-700 rounded"></span></td>
               <td class="py-4 px-6"><span class="block h-6 w-20 animate-pulse bg-zinc-700 rounded"></span></td>
               <td class="py-4 px-6"><span class="block h-6 w-12 animate-pulse bg-zinc-700 rounded"></span></td>

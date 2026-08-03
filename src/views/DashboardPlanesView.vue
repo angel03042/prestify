@@ -16,6 +16,7 @@ const planDelete = ref(null)
 
 const listaPlanes = ref([])
 const cargando = ref(true);
+const actualizando = ref(false);
 
 const filter = ref('')
 
@@ -37,18 +38,24 @@ const abrirModalDelete = (plan) => {
   planDelete.value = plan
 }
 
-const cargarPlanes = async () => {
-  cargando.value = true
+const cargarPlanes = async (isInicial = false) => {
+  if(isInicial) {
+    cargando.value = true;
+  } else {
+    actualizando.value = true;
+  }
+
   try {
     listaPlanes.value = await readPlan();
   } catch (error) {
     console.error('Error al cargar planes: ', error)
   } finally {
     cargando.value = false
+    actualizando.value = false
   }
 }
 
-onMounted(cargarPlanes)
+onMounted(() => cargarPlanes(true))
 </script>
 
 <template>
