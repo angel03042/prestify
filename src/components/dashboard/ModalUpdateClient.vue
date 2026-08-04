@@ -1,5 +1,6 @@
 <script setup>
 import { updateClient } from '@/services/supabase/clients/updateClients.js';
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 import { reactive, onMounted, ref } from 'vue';
 
 const props = defineProps({
@@ -30,10 +31,12 @@ const update = async () => {
   loading.value = true;
   try {
     await updateClient(props.cliente.id, form.nombre, form.apellido, form.telefono, form.credito);
+    toastSuccess("Cliente actualizado correctamente");
     
     emit('client-updated');
     emit('close');  
   } catch (error) {
+    toastError("Error al actualizar el cliente");
     console.error("Error al actualizar:", error);
   } finally {
     loading.value = false;

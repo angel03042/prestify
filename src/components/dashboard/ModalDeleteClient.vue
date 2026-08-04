@@ -1,6 +1,7 @@
 <script setup>
 import { deleteClient } from '@/services/supabase/clients/deleteClients.js';
 import { updateStatusClient } from '@/services/supabase/clients/updateClients.js';
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 import { ref } from 'vue'
 
 const props = defineProps({
@@ -27,6 +28,7 @@ const confirmDelete = async (status) => {
     if (status === 'Activo') {
       // Activo -> Bloqueado
       await updateStatusClient(props.cliente.id, 'Bloqueado');
+      toastSuccess("Cliente bloqueado correctamente");
 
     } else if (status === 'Bloqueado') {
       // ¿Tiene algún préstamo activo?
@@ -37,14 +39,17 @@ const confirmDelete = async (status) => {
       if (tienePrestamoActivo) {
         // Si tiene préstamo activo, vuelve a Activo
         await updateStatusClient(props.cliente.id, 'Activo');
+        toastSuccess("Cliente desbloqueado correctamente");
       } else {
         // Si no tiene préstamo activo (aunque tenga historial), pasa a Inactivo
         await updateStatusClient(props.cliente.id, 'Inactivo');
+        toastSuccess("Cliente desbloqueado correctamente");
       }
 
     } else {
       // Inactivo -> Eliminar
       await deleteClient(props.cliente.id);
+      toastSuccess("Cliente eliminado correctamente");
     }
 
     emit('client-deleted');
@@ -52,7 +57,7 @@ const confirmDelete = async (status) => {
 
   } catch (error) {
     console.error("Error al eliminar:", error);
-    alert("No se pudo eliminar el cliente");
+    toastError("Error al eliminar el cliente");
   } finally {
     loading.value = false;
   }

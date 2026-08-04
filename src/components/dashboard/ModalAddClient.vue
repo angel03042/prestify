@@ -1,5 +1,6 @@
 <script setup>
 import { clientsServices } from '@/services/supabase/clients/insertClients.js'
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 import { reactive, ref } from 'vue'
 
 const emit = defineEmits(['close', 'client-added']);
@@ -25,9 +26,11 @@ const addClients = async () => {
       telefono: '',
       credito: ''
     })
+    toastSuccess("Cliente registrado correctamente");
     emit('client-added');
     emit('close');
   } catch (error) {
+    toastError("Ocurrió un error");
     console.error('Ocurio un: ', error)
   } finally {
     loading.value = false;

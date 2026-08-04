@@ -8,3 +8,28 @@
   background-color: #717177; /* zinc-700 */
   border-radius: 20px;
 }
+
+/* Toast */
+/* Contenedor */
+.prestify-toast{
+    border-radius: 10px;
+    border: 1px solid #5c5c61;
+    box-shadow: 0 10px 20px rgba(61, 60, 60, 0.35);
+}
+
+/* Título */
+.prestify-toast-title{
+    font-size: 14px !important;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* Ícono */
+.prestify-toast-icon{
+    transform: scale(.70);
+}
+
+/* Barra de progreso */
+.swal2-timer-progress-bar{
+    background: #38bdf8;
+}
