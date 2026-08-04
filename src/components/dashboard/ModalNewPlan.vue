@@ -1,5 +1,6 @@
 <script setup>
 import { addPlan } from '@/services/supabase/planes/insertPlan.js'
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 import { ref, computed, reactive } from 'vue';
 
 const emit = defineEmits(['close', 'plan-added']);
@@ -34,9 +35,12 @@ const newPlan = async () => {
       interes: 0
     });
 
+    toastSuccess("Plan registrado correctamente");
+
     emit('plan-added');
     emit('close');
   } catch (error) {
+    toastError("Error al guardar el plan");
     console.error('Error al guardar el plan:', error);
   } finally {
     loading.value = false;

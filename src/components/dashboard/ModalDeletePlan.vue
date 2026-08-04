@@ -1,5 +1,6 @@
 <script setup>
 import { deletePlan } from '@/services/supabase/planes/deletePlan.js'
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 import { ref } from 'vue'
 
 const props = defineProps({
@@ -15,9 +16,11 @@ const confirmDelete = async () => {
   loading.value = true
   try {
     await deletePlan(props.id)
+    toastSuccess("Plan eliminado correctamente");
     emit('deleted-close')
     emit('close')
   } catch (error) {
+    toastError("Error al eliminar el plan");
     console.error('Ocurrio un: ', error)
   } finally {
     loading.value = false

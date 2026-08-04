@@ -1,5 +1,6 @@
 <script setup>
 import { updatePlan } from '@/services/supabase/planes/updatePlan.js'
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 import { ref, computed, reactive, onMounted } from 'vue';
 
 const props = defineProps({
@@ -39,9 +40,11 @@ const update = async () => {
       quincenas: '',
       interes: '',
     })
+    toastSuccess("Plan actualizado correctamente");
     emit('updated-close')
     emit('close')
   } catch (error) {
+    toastError("Error al actualizar el plan");
     console.error('Ocurrio un: ', error)
   } finally {
     loading.value = false;
