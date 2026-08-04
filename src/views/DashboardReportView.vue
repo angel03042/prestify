@@ -1,6 +1,7 @@
 <script setup>
 import { getReportData } from '@/services/supabase/reportes/reports.js'
 import { generateReceiptPDF } from '@/utils/generateReceipt.js'
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 import { ref, onMounted, computed } from 'vue'
 
 const prestamos = ref([])
@@ -54,8 +55,10 @@ const descargar = async (p, c) => {
 
   try {
     generateReceiptPDF(p, c);
+    toastSuccess("Recibo descargado correctamente");
   } catch (error) {
     console.error(error);
+    toastError("Error al descargar el recibo");
   } finally {
     loading.value = false;
   }
