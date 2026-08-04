@@ -3,6 +3,7 @@ import { readClients } from '@/services/supabase/clients/readClients.js';
 import { readPlan } from '@/services/supabase/planes/readPlan.js'
 
 import { insertPrestamo } from '@/services/supabase/prestamos/insertPrestamo.js'
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 
 import { ref, onMounted, reactive, computed } from 'vue';
 
@@ -44,10 +45,12 @@ const addPrestamo = async () => {
       monto: 0
     });
 
+    toastSuccess("Préstamo registrado correctamente");
+
     emit('inserts-close'); // Este evento debe recargar tu tabla de préstamos
     emit('close');
   } catch (error) {
-    alert(error.message);
+    toastError("Error al registrar el préstamo");
     console.error('Error:', error);
   } finally {
     loading.value = false;

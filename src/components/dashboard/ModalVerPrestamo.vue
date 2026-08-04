@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { generateReceiptPDF } from '@/utils/generateReceipt.js'
+import { toastSuccess, toastError } from "@/utils/alertas.js"
 
 const props = defineProps({
   prestamo: Object
@@ -21,8 +22,10 @@ const descargar = async () => {
 
   try {
     generateReceiptPDF(p.value, c.value);
+    toastSuccess("Recibo generado correctamente");
   } catch (error) {
-    console.error(error);
+    toastError("Error al generar el recibo");
+    console.error('Error:', error);
   } finally {
     loading.value = false;
   }

@@ -1,5 +1,6 @@
 <script setup>
 import { updatePrestamo } from '@/services/supabase/prestamos/updatePrestamo.js'
+import { toastSuccess, toastError } from "@/utils/alertas.js";
 import { ref, reactive, onMounted } from 'vue'
 
 const props = defineProps({
@@ -42,11 +43,14 @@ const addPago = async () => {
       props.prestamo.saldo_pendiente,
       props.prestamo.clientes?.status
     )
+
+    toastSuccess("Pago registrado correctamente");
     
     emit('pago-registrado');
     emit('close');
   } catch (error) {
-    alert(error.message || "Error al registrar pago");
+    toastError("Error al registrar el pago");
+    console.error('Error:', error);
   } finally {
     loading.value = false;
   }
