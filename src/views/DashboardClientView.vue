@@ -116,10 +116,10 @@ onMounted(() => cargarClientes(true));
                 <p class="text-white font-semibold whitespace-nowrap">{{ cliente.nombre }} {{ cliente.apellido }}</p>
               </td>
               <td class="py-3 px-6 text-zinc-200 font-medium whitespace-nowrap">{{ cliente.telefono }}</td>
-              <td class="py-3 px-6 text-emerald-500 font-medium whitespace-nowrap">$ {{ Number(cliente.credito).toLocaleString() }}</td>
+              <td class="py-3 px-6 text-emerald-500 font-medium whitespace-nowrap">$ {{ Number(cliente.credito).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
               <td class="py-3 px-6 whitespace-nowrap">
                 <span v-if="cliente.prestamos && cliente.prestamos.length > 0" class="text-zinc-100 font-medium">
-                  $ {{ Number(cliente.prestamos[0].monto).toLocaleString() }}
+                  $ {{ Number(cliente.prestamos[0].monto).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
                 </span>
                 <span v-else class="text-zinc-600 italic text-sm">
                   Sin deuda

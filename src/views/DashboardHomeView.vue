@@ -81,7 +81,7 @@ onMounted(cargarDashboard)</script>
           Total Recuperado
         </p>
         <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-1"></span>
-        <h3 v-else class="text-4xl font-bold text-white mt-1">${{ totalRecuperado.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
+        <h3 v-else class="text-4xl font-bold text-white mt-1">${{ totalRecuperado.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <div class="group border border-zinc-700/50 rounded-2xl p-6 hover:border-amber-500/30 transition-all duration-300">
@@ -99,7 +99,7 @@ onMounted(cargarDashboard)</script>
           Total prestado
         </p>
         <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-1"></span>
-        <h3 v-else class="text-4xl font-bold text-amber-500 mt-1">${{ totalPrestado.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
+        <h3 v-else class="text-4xl font-bold text-amber-500 mt-1">${{ totalPrestado.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <div class="group border border-zinc-700/50 rounded-2xl p-6 hover:border-blue-500/30 transition-all duration-300">
@@ -116,7 +116,7 @@ onMounted(cargarDashboard)</script>
           Por cobrar
         </p>
         <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-1"></span>
-        <h3 v-else class="text-4xl font-bold text-blue-500 mt-1">${{ porCobrar.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
+        <h3 v-else class="text-4xl font-bold text-blue-500 mt-1">${{ porCobrar.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>            
       </div>
 
       <div class="group border border-zinc-700/50 rounded-2xl p-6 hover:border-emerald-500/30 transition-all duration-300">
@@ -179,7 +179,7 @@ onMounted(cargarDashboard)</script>
           <div v-for="act in ultimasActividades" :key="act.id" class="relative flex items-center justify-between pl-8 group">
             <span class="absolute left-0 w-4 h-4 rounded-full bg-zinc-800 border-2 border-zinc-600 group-hover:border-white transition-colors"></span>
             <div class="flex flex-col">
-              <span class="text-sm text-zinc-200 font-medium">{{ act.status === 'Pagado' ? 'Liquidación' : 'Préstamo' }} de ${{ act.monto }} a "{{ act.clientes?.nombre }} {{ act.clientes?.apellido }}"</span>
+              <span class="text-sm text-zinc-200 font-medium">{{ act.status === 'Pagado' ? 'Liquidación' : 'Préstamo' }} de ${{ act.monto?.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }} a "{{ act.clientes?.nombre }} {{ act.clientes?.apellido }}"</span>
               <span class="text-xs text-zinc-500">{{ act.status === 'Pagado' ? 'Crédito restaurado' : 'Contrato activo' }}</span>
             </div>
             <span class="text-[10px] uppercase font-bold text-zinc-600">{{ calcularTiempo(act.created_at) }}</span>

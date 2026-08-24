@@ -60,7 +60,7 @@ const descargar = async () => {
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Monto prestado</span>
           <span class="text-white font-medium">
-            $ {{ Number(p?.monto).toLocaleString() }}
+            $ {{ Number(p?.monto).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
           </span>
         </div>
 
@@ -68,7 +68,7 @@ const descargar = async () => {
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Total a pagar</span>
           <span class="text-white font-medium">
-            $ {{ Number(p?.total_pagar).toLocaleString() }}
+            $ {{ Number(p?.total_pagar).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
           </span>
         </div>
 
@@ -84,7 +84,7 @@ const descargar = async () => {
         <div class="flex flex-col gap-1">
           <span class="text-zinc-500">Saldo pendiente</span>
           <span class="text-amber-400 font-medium">
-            $ {{ Number(p?.saldo_pendiente).toLocaleString() }}
+            $ {{ Number(p?.saldo_pendiente).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
           </span>
         </div>
 

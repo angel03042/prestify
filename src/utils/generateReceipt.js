@@ -65,13 +65,13 @@ export const generateReceiptPDF = (p, c) => {
   doc.text("RESUMEN DEL PRÉSTAMO", 20, 130);
 
   const tableBody = [
-    ["Monto Original", `$ ${Number(p.monto).toLocaleString(undefined, {minimumFractionDigits: 2})}`],
-    ["Intereses y Cargos", `$ ${Number(p.total_pagar - p.monto).toLocaleString(undefined, {minimumFractionDigits: 2})}`],
-    ["Total a Pagar", `$ ${Number(p.total_pagar).toLocaleString(undefined, {minimumFractionDigits: 2})}`],
-    ["Cuota Quincenal", `$ ${Number(p.pagos_quincenal).toLocaleString(undefined, {minimumFractionDigits: 2})}`],
+    ["Monto Original", `$ ${Number(p.monto).toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`],
+    ["Intereses y Cargos", `$ ${Number(p.total_pagar - p.monto).toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`],
+    ["Total a Pagar", `$ ${Number(p.total_pagar).toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`],
+    ["Cuota Quincenal", `$ ${Number(p.pagos_quincenal).toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`],
     ["Plazo Contratado", `${p.quincenas} Quincenas`],
     ["Cuotas Pagadas", `${p.pagos_realizados} de ${p.quincenas}`],
-    ["SALDO PENDIENTE", `$ ${Number(p.saldo_pendiente).toLocaleString(undefined, {minimumFractionDigits: 2})}`],
+    ["SALDO PENDIENTE", `$ ${Number(p.saldo_pendiente).toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`],
   ];
 
   autoTable(doc, {

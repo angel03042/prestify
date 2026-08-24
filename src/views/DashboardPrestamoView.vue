@@ -109,7 +109,7 @@ onMounted(() => cargarPrestamos(true))
               <td class="py-3 px-6 text-white font-medium whitespace-nowrap">
                 {{ prestamo.clientes?.nombre }} {{ prestamo.clientes?.apellido }}
               </td>
-              <td class="py-3 px-6 text-white whitespace-nowrap">${{ Number(prestamo.monto).toLocaleString() }}</td>
+              <td class="py-3 px-6 text-white whitespace-nowrap">${{ Number(prestamo.monto).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
               <td class="py-3 px-6 text-zinc-300 whitespace-nowrap">{{ prestamo.quincenas }}</td>
               <td class="py-3 px-6 text-zinc-400 whitespace-nowrap">{{ new Date(prestamo.created_at).toLocaleDateString('es-MX') }}</td>
               <td class="py-3 px-6 font-medium whitespace-nowrap" :class="prestamo.status === 'Liquidado' ? 'text-emerald-400' : 'text-orange-400'">

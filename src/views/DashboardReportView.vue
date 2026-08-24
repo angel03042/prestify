@@ -79,25 +79,25 @@ onMounted(cargarReportes)
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 shadow-sm">
         <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Total Prestado</p>
         <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-2"></span>
-        <h3 v-else class="text-3xl text-white font-semibold mt-2">${{ totalPrestado.toLocaleString() }}</h3>
+        <h3 v-else class="text-3xl text-white font-semibold mt-2">${{ totalPrestado.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 shadow-sm">
         <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Total (Recuperado)</p>
         <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-2"></span>
-        <h3 v-else class="text-3xl text-blue-400 font-semibold mt-2">${{ Number(totalRecuperado).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
+        <h3 v-else class="text-3xl text-blue-400 font-semibold mt-2">${{ Number(totalRecuperado).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 shadow-sm">
         <p class="text-xs text-zinc-500 uppercase font-bold tracking-wider">Interés Proyectado</p>
         <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-2"></span>
-        <h3 v-else class="text-3xl text-indigo-400 font-semibold mt-2">${{ gananciaProyectada.toLocaleString() }}</h3>
+        <h3 v-else class="text-3xl text-indigo-400 font-semibold mt-2">${{ gananciaProyectada.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</h3>
       </div>
 
       <div class="border border-zinc-800 rounded-2xl p-5 bg-zinc-900/50 border-l-emerald-500/50 border-l-4 shadow-sm">
         <p class="text-xs text-emerald-500 uppercase font-bold tracking-wider">Ganancia Real (Cobrada)</p>
         <span v-if="cargando" class="block h-8 w-24 animate-pulse bg-zinc-700 rounded mt-2"></span>
-        <h3 v-else class="text-3xl text-emerald-400 font-semibold mt-2">${{ Number(gananciaReal).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</h3>
+        <h3 v-else class="text-3xl text-emerald-400 font-semibold mt-2">${{ Number(gananciaReal).toLocaleString('es-MX', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</h3>
       </div>
     </div>
 
@@ -120,9 +120,9 @@ onMounted(cargarReportes)
               <td class="py-3 px-6 text-white font-medium whitespace-nowrap">
                 {{ item.clientes?.nombre }} {{ item.clientes?.apellido }}
               </td>
-              <td class="py-4 px-6 whitespace-nowrap">${{ Number(item.monto).toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</td>
-              <td class="py-4 px-6 text-emerald-400/80 whitespace-nowrap">${{ Number(item.total_pagar).toLocaleString(undefined, { minimumFractionDigits: 2 }) }}</td>
-              <td class="py-4 px-6 font-medium whitespace-nowrap">${{ Number(item.pagos_quincenal).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
+              <td class="py-4 px-6 whitespace-nowrap">${{ Number(item.monto).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
+              <td class="py-4 px-6 text-emerald-400/80 whitespace-nowrap">${{ Number(item.total_pagar).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
+              <td class="py-4 px-6 font-medium whitespace-nowrap">${{ Number(item.pagos_quincenal).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
               <td class="py-4 px-6 whitespace-nowrap">
                 <span class="bg-zinc-800 px-2 py-1 rounded text-zinc-300 text-xs font-mono">
                   {{ item.pagos_realizados }} / {{ item.quincenas }}
